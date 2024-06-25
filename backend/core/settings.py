@@ -253,13 +253,14 @@ FRONTEND_DOMAIN = os.environ.get("FRONTEND_DOMAIN")
 
 PAYMENT_SUCCESS_URL = os.environ.get("PAYMENT_SUCCESS_URL")
 PAYMENT_CANCEL_URL = os.environ.get("PAYMENT_CANCEL_URL")
+
 # Celery
-CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL")
-CELERY_RESULT_BACKEND = os.environ.get("REDIS_BACKEND")
-CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True 
-CELERY_ACCEPT_CONTENT = ['json']
-CELERY_TASK_SERIALIZER = 'json'
-CELERY_RESULT_SERIALIZER = 'json'
+# CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL")
+# CELERY_RESULT_BACKEND = os.environ.get("REDIS_BACKEND")
+# CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True 
+# CELERY_ACCEPT_CONTENT = ['json']
+# CELERY_TASK_SERIALIZER = 'json'
+# CELERY_RESULT_SERIALIZER = 'json'
 
 # Redis Cache
 # CACHES = {
@@ -269,15 +270,15 @@ CELERY_RESULT_SERIALIZER = 'json'
 #     },
 # }
 
-CACHES = {
-    "default": {
-        "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/1",
-        "OPTIONS": {
-            "CLIENT_CLASS": "django_redis.client.DefaultClient",
-        }
-    }
-}
+# CACHES = {
+#     "default": {
+#         "BACKEND": "django_redis.cache.RedisCache",
+#         "LOCATION": "redis://127.0.0.1:6379/1",
+#         "OPTIONS": {
+#             "CLIENT_CLASS": "django_redis.client.DefaultClient",
+#         }
+#     }
+# }
 
 
 CACHE_MIDDLEWARE_ALIAS = "default"
