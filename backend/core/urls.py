@@ -1,4 +1,5 @@
 from dj_rest_auth.registration.views import ResendEmailVerificationView, VerifyEmailView
+from users.views import CustomResendEmailVerificationView
 from dj_rest_auth.views import (
     LogoutView,
     PasswordChangeView,
@@ -26,13 +27,11 @@ urlpatterns = [
     # path("api/user/payments/", include("payment.urls", namespace="payment")),
     path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
     # Token and refresh Token
-    path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
-    path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),
     path(
-        "resend-email/", ResendEmailVerificationView.as_view(), name="rest_resend_email"
+        "api/resend-email/", CustomResendEmailVerificationView.as_view(), name="rest_resend_email"
     ),
     re_path(
-        r"^account-confirm-email/(?P<key>[-:\w]+)/$",
+        r"^api/account-confirm-email/(?P<key>[-:\w]+)/$",
         VerifyEmailView.as_view(),
         name="account_confirm_email",
     ),
@@ -49,7 +48,7 @@ urlpatterns = [
         name="password_reset_confirm",
     ),
     path("password/change/", PasswordChangeView.as_view(), name="rest_password_change"),
-    path("logout/", LogoutView.as_view(), name="rest_logout"),
+    path("api/logout/", LogoutView.as_view(), name="rest_logout"),
 ]
 
 # Media Assets

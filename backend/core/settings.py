@@ -153,6 +153,11 @@ MEDIA_URL = "media/"     # e.g. localhost:80/media/image.jpg
 
 # directory where all static files of the app are going to be put
 
+# Add the frontend URL
+FRONTEND_URL = 'http://localhost:3000'
+ACCOUNT_ADAPTER = 'users.adapters.CustomAccountAdapter'
+
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
@@ -181,11 +186,17 @@ REST_FRAMEWORK = {
 
 SITE_ID = 1
 
-REST_USE_JWT = True
-# JWT Token settings for cookies
-JWT_AUTH_COOKIE = 'ecom-jwt'
-JWT_AUTH_REFRESH_COOKIE = 'ecom-jwt-refresh'
-JWT_AUTH_COOKIE_USE_CSRF = False  # Adjust based on your CSRF strategy
+# REST_USE_JWT = True
+# # JWT Token settings for cookies
+# JWT_AUTH_COOKIE = 'ecom-jwt'
+# JWT_AUTH_REFRESH_COOKIE = 'ecom-jwt-refresh'
+# JWT_AUTH_COOKIE_USE_CSRF = False  # Adjust based on your CSRF strategy
+
+REST_AUTH ={
+    'USE_JWT': True,
+    'JWT_AUTH_COOKIE': 'ecom-jwt',
+    'JWT_AUTH_REFRESH_COOKIE': 'ecom-jwt-refresh',
+}
 # JWT Token lifetime settings
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=5),

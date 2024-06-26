@@ -1,6 +1,6 @@
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from allauth.socialaccount.providers.oauth2.client import OAuth2Client
-from dj_rest_auth.registration.views import RegisterView, SocialLoginView
+from dj_rest_auth.registration.views import RegisterView, SocialLoginView, ResendEmailVerificationView as BaseResendEmailVerificationView
 from dj_rest_auth.views import LoginView
 from django.contrib.auth import get_user_model
 from django.utils.translation import gettext as _
@@ -21,6 +21,10 @@ from users.serializers import (
     UserRegistrationSerializer,
     UserSerializer,
 )
+from dj_rest_auth.registration.views import ResendEmailVerificationView as BaseResendEmailVerificationView
+from allauth.account.models import EmailAddress
+from rest_framework.views import APIView
+
 
 User = get_user_model()
 
@@ -106,3 +110,18 @@ class AddressViewSet(ReadOnlyModelViewSet):
         res = super().get_queryset()
         user = self.request.user
         return res.filter(user=user)
+
+# Resend the Email View
+
+class CustomResendEmailVerificationView(APIView):
+    def post(self, request, *args, **kwargs):
+        email = request.data.get("email")
+        if not email:
+            return Response({"email": "This field is required."}, status=status.HTTP_400_BAD_REQUEST)
+
+        try:
+            email_address = EmailAddress.objects.get(email=email)
+            email_address.send_confirmation(request)
+            return Response({"detail": "ok"}, status=status.HTTP_200_OK)
+        except EmailAddress.DoesNotExist:
+            return Response({"email": "Email address not found."}, status=status.HTTP_400_BAD_REQUEST)
