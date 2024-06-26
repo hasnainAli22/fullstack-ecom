@@ -1,13 +1,12 @@
 // "use client";
 
-import CategoryList from "@/components/CategoryList";
-import ProductList from "@/components/ProductList";
-import Skeleton from "@/components/Skeleton";
-import Slider from "@/components/Slider";
-import { Suspense, useContext, useEffect } from "react";
+import CategoryList from '@/components/CategoryList'
+import ProductList from '@/components/ProductList'
+import Skeleton from '@/components/Skeleton'
+import Slider from '@/components/Slider'
+import { Suspense, useContext, useEffect } from 'react'
 
 const HomePage = async () => {
-
   return (
     <div className="">
       <Slider />
@@ -37,9 +36,8 @@ const HomePage = async () => {
           />
         </Suspense>
       </div>
-       
     </div>
-  );
-};
+  )
+}
 
-export default HomePage;
+export default HomePage
