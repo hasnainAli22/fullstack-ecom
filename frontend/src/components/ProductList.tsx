@@ -1,73 +1,77 @@
-"use client"
+'use client'
 
-import React, { useState, useEffect } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import DOMPurify from "isomorphic-dompurify";
-import Pagination from "./Pagination";
-import { fetchProducts, Product } from "@/lib/api"; // Adjust the path if necessary
+import React, { useState, useEffect } from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
+import DOMPurify from 'isomorphic-dompurify'
+import Pagination from './Pagination'
+import { fetchProducts, Product } from '@/lib/api' // Adjust the path if necessary
 
-const PRODUCT_PER_PAGE = 8;
+const PRODUCT_PER_PAGE = 8
 
 const ProductList = ({
   categoryId,
   limit,
   searchParams,
 }: {
-  categoryId: string;
-  limit?: number;
-  searchParams?: any;
+  categoryId: string
+  limit?: number
+  searchParams?: any
 }) => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [currentPage, setCurrentPage] = useState(0);
-  const [hasNext, setHasNext] = useState(false);
-  const [hasPrev, setHasPrev] = useState(false);
+  const [products, setProducts] = useState<Product[]>([])
+  const [loading, setLoading] = useState(true)
+  const [currentPage, setCurrentPage] = useState(0)
+  const [hasNext, setHasNext] = useState(false)
+  const [hasPrev, setHasPrev] = useState(false)
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
+      setLoading(true)
       try {
         const data = await fetchProducts({
-          name: searchParams?.name || "",
+          name: searchParams?.name || '',
           category: categoryId,
-          type: searchParams?.type ? [searchParams.type] : ["physical", "digital"],
+          type: searchParams?.type
+            ? [searchParams.type]
+            : ['physical', 'digital'],
           min_price: searchParams?.min || 0,
           max_price: searchParams?.max || 999999,
           limit: limit || PRODUCT_PER_PAGE,
-          offset: searchParams?.page ? parseInt(searchParams.page) * (limit || PRODUCT_PER_PAGE) : 0,
-          sort: searchParams?.sort || "",
-        });
+          offset: searchParams?.page
+            ? parseInt(searchParams.page) * (limit || PRODUCT_PER_PAGE)
+            : 0,
+          sort: searchParams?.sort || '',
+        })
 
-        setProducts(data);
-        setCurrentPage(searchParams?.page ? parseInt(searchParams.page) : 0);
-        setHasNext(data.length === (limit || PRODUCT_PER_PAGE));
-        setHasPrev((searchParams?.page ? parseInt(searchParams.page) : 0) > 0);
+        setProducts(data)
+        setCurrentPage(searchParams?.page ? parseInt(searchParams.page) : 0)
+        setHasNext(data.length === (limit || PRODUCT_PER_PAGE))
+        setHasPrev((searchParams?.page ? parseInt(searchParams.page) : 0) > 0)
       } catch (error) {
-        console.error("Error fetching products:", error);
+        console.error('Error fetching products:', error)
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
+    }
 
-    fetchData();
-  }, [categoryId, limit, searchParams]);
+    fetchData()
+  }, [categoryId, limit, searchParams])
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>
   }
 
   return (
     <div className="mt-12 flex gap-x-8 gap-y-16 justify-between flex-wrap">
       {products.map((product: Product) => (
         <Link
-          href={"/" + product.id}
+          href={'/' + product.id}
           className="w-full flex flex-col gap-4 sm:w-[45%] lg:w-[22%]"
           key={product.id}
         >
           <div className="relative w-full h-80">
             <Image
-              src={product.image || "/product.png"}
+              src={product.image || '/product.png'}
               alt={product.name}
               fill
               sizes="25vw"
@@ -99,7 +103,7 @@ const ProductList = ({
         />
       )}
     </div>
-  );
-};
+  )
+}
 
-export default ProductList;
+export default ProductList
