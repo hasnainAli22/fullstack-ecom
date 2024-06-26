@@ -16,44 +16,34 @@ from .models import Address, Profile
 
 User = get_user_model()
 
-
 class UserRegistrationSerializer(RegisterSerializer):
     """
-    Serializer for registrating new users using email or phone number.
+    Serializer for registering new users using email.
     """
 
     username = None
     first_name = serializers.CharField(required=True, write_only=True)
     last_name = serializers.CharField(required=True, write_only=True)
-    # phone_number = PhoneNumberField(
-    #     required=False,
-    #     write_only=True,
-    #     validators=[
-    #         UniqueValidator(
-    #             queryset=PhoneNumber.objects.all(),
-    #             message=_("A user is already registered with this phone number."),
-    #         )
-    #     ],
-    # )
-    email = serializers.EmailField(required=False)
+    email = serializers.EmailField(required=True)
+
+    def validate_email(self, email):
+        if User.objects.filter(email=email).exists():
+            raise serializers.ValidationError(_("A user with this email already exists."))
+        return email
 
     def validate(self, validated_data):
-        email = validated_data.get("email", None)
-        # phone_number = validated_data.get("phone_number", None)
+        email = validated_data.get("email")
 
         if not email:
             raise serializers.ValidationError(_("Enter an email."))
 
         if validated_data["password1"] != validated_data["password2"]:
-            raise serializers.ValidationError(
-                _("The two password fields didn't match.")
-            )
+            raise serializers.ValidationError(_("The two password fields didn't match."))
 
         return validated_data
 
     def get_cleaned_data_extra(self):
         return {
-            # "phone_number": self.validated_data.get("phone_number", ""),
             "first_name": self.validated_data.get("first_name", ""),
             "last_name": self.validated_data.get("last_name", ""),
         }
@@ -63,7 +53,6 @@ class UserRegistrationSerializer(RegisterSerializer):
         user.last_name = self.validated_data.get("last_name")
         user.save()
 
-        # phone_number = validated_data.get("phone_number")
     def custom_signup(self, request, user):
         self.create_extra(user, self.get_cleaned_data_extra())
 
