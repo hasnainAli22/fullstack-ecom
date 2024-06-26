@@ -1,5 +1,5 @@
-import Image from "next/image";
-import Link from "next/link";
+import Image from 'next/image'
+import Link from 'next/link'
 
 const Footer = () => {
   return (
@@ -9,13 +9,10 @@ const Footer = () => {
         {/* LEFT */}
         <div className="w-full md:w-1/2 lg:w-1/4 flex flex-col gap-8">
           <Link href="/">
-            <div className="text-2xl tracking-wide">LAMA</div>
+            <div className="text-2xl tracking-wide">Craft</div>
           </Link>
-          <p>
-            3252 Winding Way, Central Plaza, Willowbrook, CA 90210, United
-            States
-          </p>
-          <span className="font-semibold">hello@lama.dev</span>
+          <p>Universty of Gujrat, Gujrat, Punjab, United States</p>
+          <span className="font-semibold">hello@lucky.dev</span>
           <span className="font-semibold">+1 234 567 890</span>
           <div className="flex gap-6">
             <Image src="/facebook.png" alt="" width={16} height={16} />
@@ -42,8 +39,8 @@ const Footer = () => {
             <div className="flex flex-col gap-6">
               <Link href="">New Arrivals</Link>
               <Link href="">Accessories</Link>
-              <Link href="">Men</Link>
-              <Link href="">Women</Link>
+              <Link href="">Mobiles</Link>
+              <Link href="">Electronics</Link>
               <Link href="">All Products</Link>
             </div>
           </div>
@@ -85,7 +82,7 @@ const Footer = () => {
       </div>
       {/* BOTTOM */}
       <div className="flex flex-col md:flex-row items-center justify-between gap-8 mt-16">
-        <div className="">© 2024 Lama Shop</div>
+        <div className="">© 2024 Commerec Craft</div>
         <div className="flex flex-col gap-8 md:flex-row">
           <div className="">
             <span className="text-gray-500 mr-4">Language</span>
@@ -98,7 +95,7 @@ const Footer = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Footer;
+export default Footer

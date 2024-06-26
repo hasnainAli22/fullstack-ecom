@@ -1,7 +1,6 @@
 'use client'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-
 import { useAuth } from '@/context/authContext'
 
 const Register = () => {
@@ -16,10 +15,6 @@ const Register = () => {
   const [error, setError] = useState('')
   const [isLoading, setIsLoading] = useState(false)
   const [message, setMessage] = useState('')
-
-  if (user) {
-    setError('Already Logged In!')
-  }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

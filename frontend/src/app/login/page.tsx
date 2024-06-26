@@ -33,8 +33,10 @@ const Login = () => {
     try {
       await login({ email, password })
       setMessage('Sucessful! you are being redirected.')
-      // Redirect to the other page
-      router.push('/')
+      setIsRedirecting(true)
+      setTimeout(() => {
+        router.push('/')
+      }, 3000)
     } catch (error) {
       setError(`${error}`)
     } finally {
