@@ -1,7 +1,7 @@
 //import Reviews from '@/components/Reviews'
 import { notFound } from 'next/navigation'
 import Add from '@/components/Add'
-import { fetchProductById, Product } from '@/lib/api'
+import { fetchProductsById, Product } from '@/lib/api'
 import Image from 'next/image'
 import { Suspense } from 'react'
 
@@ -12,7 +12,7 @@ const SinglePage = async ({ params }: { params: { id: number } }) => {
     return <div className="ml-14">Invalid Product ID</div>
   }
 
-  const product = await fetchProductById(productId)
+  const product = await fetchProductsById(productId)
 
   if (!product) {
     notFound()
