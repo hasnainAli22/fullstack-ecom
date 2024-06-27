@@ -1,8 +1,25 @@
 // lib/api.ts
 import axios from 'axios'
 
-const API_URL = 'http://localhost:8000/api'
+// const axiosInstance = axios.create({
+//   baseURL: 'http://localhost:8000/api',
+//   timeout: 5000,
+//   headers: {
+//     'Content-Type': 'application/json',
+//   },
+// })
 
+// const fetchData = async (url: string, options = {}) => {
+//   try {
+//     const response = await axiosInstance.get(url, options)
+//     return response.data
+//   } catch (errors) {
+//     console.log(`Error retriving data ${errors}`)
+//     throw new Error('Could not get data')
+//   }
+// }
+
+const API_URL = 'http://localhost:8000/api'
 export interface Product {
   id: number
   seller: string

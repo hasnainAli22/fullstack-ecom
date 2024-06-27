@@ -1,6 +1,7 @@
 'use client'
 
 import Image from 'next/image'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 const SearchBar = () => {
@@ -27,9 +28,16 @@ const SearchBar = () => {
         placeholder="Search"
         className="flex-1 bg-transparent outline-none"
       />
-      <button className="cursor-pointer">
-        <Image src="/search.png" alt="" width={16} height={16} />
-      </button>
+      <div>
+        <button className="cursor-pointer mr-2">
+          <Image src="/search.png" alt="" width={16} height={16} />
+        </button>
+        <Link href={'/image-search'}>
+          <button className="cursor-pointer">
+            <Image src="/imagesearch.png" alt="" width={16} height={16} />
+          </button>
+        </Link>
+      </div>
     </form>
   )
 }

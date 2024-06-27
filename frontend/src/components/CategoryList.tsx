@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { fetchCategories, Category } from '@/lib/api' // Adjust the path if necessary
+import { fetchCategories, Category } from '@/lib/api'
 
 const CategoryList = () => {
   const [categories, setCategories] = useState<Category[]>([])
@@ -25,7 +25,7 @@ const CategoryList = () => {
   }, [])
 
   if (loading) {
-    return <div className="ml-14">Loading...</div>
+    return <div className="ml-32">Loading...</div>
   }
 
   return (

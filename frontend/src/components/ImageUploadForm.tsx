@@ -25,9 +25,14 @@ const ImageUploadForm: React.FC<ImageUploadFormProps> = ({ onSubmit }) => {
   }
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit} className="flex justify-between">
       <input type="file" accept="image/*" onChange={handleFileChange} />
-      <button type="submit">Search</button>
+      <button
+        className="rounded-2xl ring-1 ring-lama text-lama w-max py-2 px-4 text-xs hover:bg-lama hover:text-white"
+        type="submit"
+      >
+        Search
+      </button>
     </form>
   )
 }

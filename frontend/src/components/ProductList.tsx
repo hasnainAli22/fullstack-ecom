@@ -6,6 +6,7 @@ import Link from 'next/link'
 import DOMPurify from 'isomorphic-dompurify'
 import Pagination from './Pagination'
 import { fetchProducts, Product } from '@/lib/api'
+import { use } from 'react'
 
 const PRODUCT_PER_PAGE = 4
 
