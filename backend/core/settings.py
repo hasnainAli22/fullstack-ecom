@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     "dj_rest_auth.registration",
     "phonenumber_field",
     "corsheaders",
+    "django_filters",
     # My Applications
     "users",
     "accounts",
@@ -183,6 +184,9 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+    'DEFAULT_FILTER_BACKENDS': [
+        'django_filters.rest_framework.DjangoFilterBackend',
+    ],
 }
 
 SITE_ID = 1

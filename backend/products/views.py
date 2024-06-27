@@ -7,6 +7,7 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from products.models import Product, ProductCategory
 from products.permissions import IsSellerOrAdmin
 from products.serializers import ProductCategoryReadSerializer, ImageSearchSerializer, ProductReadSerializer, ProductWriteSerializer
+from django_filters.rest_framework import DjangoFilterBackend
 
 from products.utils import extract_features_from_image, find_similar_products
 
@@ -21,9 +22,14 @@ class ProductCategoryViewSet(viewsets.ReadOnlyModelViewSet):
 
 class ProductViewSet(viewsets.ModelViewSet):
     """
-    CRUD products
+    CRUD Products
     """
     queryset = Product.objects.all()
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['category',] 
+    search_fields = ['name',]  
+    ordering_fields = ['price', 'name']  
+    ordering = ['price'] 
 
     def get_serializer_class(self):
         if self.action in ("create", "update", "partial_update", "destroy"):

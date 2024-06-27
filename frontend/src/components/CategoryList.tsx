@@ -1,32 +1,31 @@
-"use client"
+'use client'
 
-import React, { useEffect, useState } from "react";
-import Image from "next/image";
-import Link from "next/link";
-import { fetchCategories, Category } from "@/lib/api"; // Adjust the path if necessary
+import React, { useEffect, useState } from 'react'
+import Image from 'next/image'
+import Link from 'next/link'
+import { fetchCategories, Category } from '@/lib/api' // Adjust the path if necessary
 
 const CategoryList = () => {
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [categories, setCategories] = useState<Category[]>([])
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
+      setLoading(true)
       try {
-        const data = await fetchCategories();
-        setCategories(data);
+        const data = await fetchCategories()
+        setCategories(data)
       } catch (error) {
-        console.error("Error fetching categories:", error);
+        console.error('Error fetching categories:', error)
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
-
-    fetchData();
-  }, []);
+    }
+    fetchData()
+  }, [])
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div className="ml-14">Loading...</div>
   }
 
   return (
@@ -34,17 +33,17 @@ const CategoryList = () => {
       <div className="flex gap-4 md:gap-8">
         {categories.map((item) => (
           <Link
-            href={`/list?cat=${item.id}`}
+            href={`/list?category=${item.id}`}
             className="flex-shrink-0 w-full sm:w-1/2 lg:w-1/4 xl:w-1/6"
             key={item.id}
           >
             <div className="relative bg-slate-100 w-full h-96">
               <Image
-                src={item.icon || "/cat.png"}
+                src={item.icon || '/cat.png'}
                 alt={item.name}
                 fill
                 sizes="20vw"
-                className="object-cover"
+                className="object-cover rounded"
               />
             </div>
             <h1 className="mt-8 font-light text-xl tracking-wide">
@@ -54,7 +53,7 @@ const CategoryList = () => {
         ))}
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default CategoryList;
+export default CategoryList

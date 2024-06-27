@@ -1,11 +1,11 @@
-"use client";
+'use client'
 
-import Image from "next/image";
-import Link from "next/link";
-import { useState } from "react";
+import Image from 'next/image'
+import Link from 'next/link'
+import { useState } from 'react'
 
 const Menu = () => {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(false)
 
   return (
     <div className="">
@@ -24,12 +24,12 @@ const Menu = () => {
           <Link href="/">Deals</Link>
           <Link href="/">About</Link>
           <Link href="/">Contact</Link>
-          <Link href="/">Logout</Link>
+          <Link href="/">Account</Link>
           <Link href="/">Cart(1)</Link>
         </div>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default Menu;
+export default Menu
