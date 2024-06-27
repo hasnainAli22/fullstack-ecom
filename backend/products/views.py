@@ -7,7 +7,10 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 from products.models import Product, ProductCategory
 from products.permissions import IsSellerOrAdmin
 from products.serializers import ProductCategoryReadSerializer, ImageSearchSerializer, ProductReadSerializer, ProductWriteSerializer
+from django_filters.rest_framework import DjangoFilterBackend
 
+from django.core.files.storage import default_storage
+from django.core.files.base import ContentFile
 from products.utils import extract_features_from_image, find_similar_products
 
 
@@ -21,9 +24,14 @@ class ProductCategoryViewSet(viewsets.ReadOnlyModelViewSet):
 
 class ProductViewSet(viewsets.ModelViewSet):
     """
-    CRUD products
+    CRUD Products
     """
     queryset = Product.objects.all()
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['category',] 
+    search_fields = ['name',]  
+    ordering_fields = ['price', 'name']  
+    ordering = ['price'] 
 
     def get_serializer_class(self):
         if self.action in ("create", "update", "partial_update", "destroy"):
@@ -47,11 +55,10 @@ class ImageSearchView(APIView):
         if serializer.is_valid():
             image = serializer.validated_data['image']
             if isinstance(image, InMemoryUploadedFile):
-                image_path = '/tmp/' + image.name
-                with open(image_path, 'wb+') as f:
-                    for chunk in image.chunks():
-                        f.write(chunk)
-                features = extract_features_from_image(image_path)
+                image_name = image.name
+                image_path = default_storage.save(image_name, ContentFile(image.read()))
+                image_full_path = default_storage.path(image_path)
+                features = extract_features_from_image(image_full_path)
 
                 similar_products = find_similar_products(features)
 
