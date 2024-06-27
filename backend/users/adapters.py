@@ -14,3 +14,4 @@ class CustomAccountAdapter(DefaultAccountAdapter):
             "key": emailconfirmation.key,
         }
         self.send_mail("account/email/email_confirmation", emailconfirmation.email_address.email, context)
+        

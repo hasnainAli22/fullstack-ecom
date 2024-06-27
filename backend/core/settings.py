@@ -60,6 +60,7 @@ INSTALLED_APPS = [
     "corsheaders",
     # My Applications
     "users",
+    "accounts",
     "products"
     
 ]
