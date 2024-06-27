@@ -1,30 +1,20 @@
-from django.urls import include, path
-from rest_framework.routers import DefaultRouter
-
+from django.urls import path, re_path
 from .views import (
-    AddressViewSet,
-    ProfileAPIView,
-    GoogleLogin,
-    # SendOrResendSMSAPIView,
-    UserAPIView,
-    UserLoginAPIView,
-    UserRegisterationAPIView,
-    # VerifyPhoneNumberAPIView,
+    CustomProviderAuthView,
+    CustomTokenObtainPairView,
+    CustomTokenRefreshView,
+    CustomTokenVerifyView,
+    LogoutView
 )
-
-app_name = "users"
-
-router = DefaultRouter()
-router.register(r"", AddressViewSet)
-
+# app_name = 'users'
 urlpatterns = [
-    # Registering and Authenticating
-    path("register/", UserRegisterationAPIView.as_view(), name="user_register"),
-    path("login/", UserLoginAPIView.as_view(), name="user_login"),
-    path("login/google/", GoogleLogin.as_view(), name="google_login"),
-
-
-    path("", UserAPIView.as_view(), name="user_detail"),
-    path("profile/", ProfileAPIView.as_view(), name="profile_detail"),
-    path("profile/address/", include(router.urls)),
+    re_path(
+        r'^o/(?P<provider>\S+)/$',
+        CustomProviderAuthView.as_view(),
+        name='provider-auth'
+    ),
+    path('jwt/create/', CustomTokenObtainPairView.as_view()),
+    path('jwt/refresh/', CustomTokenRefreshView.as_view()),
+    path('jwt/verify/', CustomTokenVerifyView.as_view()),
+    path('logout/', LogoutView.as_view()),
 ]
