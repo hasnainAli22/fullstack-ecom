@@ -48,7 +48,7 @@ const SinglePage = async ({ params }: { params: { id: number } }) => {
             </h2>
           </div>
         )}
-        <Add productId={product.id!} stockNumber={product.quantity || 0} />
+        <Add product={product} productId={product.id!} stockNumber={product.quantity || 0} />
 
         {/* <div className="h-[2px] bg-gray-100" />
         

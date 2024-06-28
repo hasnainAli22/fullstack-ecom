@@ -4,9 +4,22 @@ from rest_framework import permissions, viewsets, status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.core.files.uploadedfile import InMemoryUploadedFile
-from products.models import Product, ProductCategory
+from products.models import (
+    Product,
+    ProductCategory,
+    CartItem,
+    Order,
+)
 from products.permissions import IsSellerOrAdmin
-from products.serializers import ProductCategoryReadSerializer, ImageSearchSerializer, ProductReadSerializer, ProductWriteSerializer
+from products.serializers import (
+    ProductCategoryReadSerializer,
+    ImageSearchSerializer,
+    ProductReadSerializer,
+    ProductWriteSerializer,
+    CartItemSerializer,
+    OrderSerializer,
+    
+    )
 from django_filters.rest_framework import DjangoFilterBackend
 
 from django.core.files.storage import default_storage
@@ -66,3 +79,20 @@ class ImageSearchView(APIView):
                 return Response(product_serializer.data, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class CartItemViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = CartItem.objects.all()
+    serializer_class = CartItemSerializer
+
+    def get_queryset(self):
+        return self.queryset.filter(user=self.request.user)
+
+class OrderViewSet(viewsets.ModelViewSet):
+    permission_classes = [permissions.IsAuthenticated]
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+
+    def get_queryset(self):
+        return self.queryset.filter(user=self.request.user)
