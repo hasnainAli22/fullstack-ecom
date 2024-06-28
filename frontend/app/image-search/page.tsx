@@ -1,7 +1,7 @@
 // pages/image-search.tsx
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import DOMPurify from 'isomorphic-dompurify'
@@ -37,7 +37,7 @@ const ImageSearch = () => {
   }
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <div className="ml-4">Loading...</div>
   }
 
   return (
