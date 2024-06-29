@@ -4,58 +4,30 @@ import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import DOMPurify from 'isomorphic-dompurify'
-import Pagination from './Pagination'
-import { fetchProducts, Product } from '@/lib/api'
-import { use } from 'react'
-
-const PRODUCT_PER_PAGE = 4
+//import Pagination from './Pagination'
+import { useFetchProductsQuery, Product } from '@/redux/product/productApiSlice'
 
 const ProductList = ({
   categoryId,
   searchParams,
 }: {
-  categoryId: number | undefined
+  categoryId?: number
   searchParams?: any
 }) => {
-  const [products, setProducts] = useState<Product[]>([])
-  const [loading, setLoading] = useState(true)
-  const [currentPage, setCurrentPage] = useState(0)
-  const [hasNext, setHasNext] = useState(false)
-  const [hasPrev, setHasPrev] = useState(false)
+  const { data, isLoading, isError } = useFetchProductsQuery(categoryId)
+  if (isError) {
+    return <div>ERROR OCCURED!</div>
+  }
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true)
-      try {
-        const data = await fetchProducts({
-          category: categoryId || undefined,
-          sort: searchParams?.sort || '',
-        })
-        console.log('fetching products...')
-
-        setProducts(data)
-        setCurrentPage(searchParams?.page ? parseInt(searchParams.page) : 0)
-        setHasNext(data.length === PRODUCT_PER_PAGE)
-        setHasPrev((searchParams?.page ? parseInt(searchParams.page) : 0) > 0)
-      } catch (error) {
-        console.error('Error fetching products:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchData()
-  }, [categoryId, searchParams])
-
-  if (loading) {
+  if (isLoading) {
     return <div>Loading...</div>
   }
 
   return (
     <div className="flex flex-col">
       <div className="mt-12 flex gap-x-8 gap-y-16 justify-between flex-wrap">
-        {products.length > 0 ? (
-          products.map((product: Product) => (
+        {(data?.length as number) > 0 ? (
+          data?.map((product: Product) => (
             <Link
               href={'/' + product.id}
               className="w-full flex flex-col gap-4 sm:w-[45%] lg:w-[22%]"
@@ -90,13 +62,13 @@ const ProductList = ({
         ) : (
           <p>No products available.</p>
         )}
-        {(searchParams?.category || searchParams?.name) && (
+        {/* {searchParams?.category && (
           <Pagination
             currentPage={currentPage}
             hasPrev={hasPrev}
             hasNext={hasNext}
           />
-        )}
+        )} */}
       </div>
     </div>
   )

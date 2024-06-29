@@ -1,21 +1,20 @@
 'use client'
 
-import { addToCart } from '@/redux/cart/cartSlice';
-import { useAppDispatch } from '@/redux/hooks';
-import { useState } from 'react';
-
+import { addToCart } from '@/redux/cart/cartSlice'
+import { useAppDispatch } from '@/redux/hooks'
+import { useState } from 'react'
 
 const Add = ({
   product,
   productId,
   stockNumber,
 }: {
-  product:any,
+  product: any
   productId: number
   stockNumber: number
 }) => {
-  const [quantity, setQuantity] = useState(1);
-  const dispatch = useAppDispatch();
+  const [quantity, setQuantity] = useState(1)
+  const dispatch = useAppDispatch()
 
   const handleQuantity = (type: 'i' | 'd') => {
     if (type === 'd' && quantity > 1) {
@@ -29,9 +28,8 @@ const Add = ({
     // console.log("PRODUCT", productId, quantity)
     console.log(product)
 
-    dispatch(addToCart({ product, quantity: 1 })); //TODO: pass product instead of the product id
-
-  };
+    dispatch(addToCart({ product, quantity: 1 }))
+  }
 
   return (
     <div className="flex flex-col gap-4">

@@ -3,35 +3,22 @@
 import React, { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
-import { fetchCategories, Category } from '@/lib/api'
+import { useFetchCategoryQuery } from '@/redux/product/productApiSlice'
 
 const CategoryList = () => {
-  const [categories, setCategories] = useState<Category[]>([])
-  const [loading, setLoading] = useState(true)
+  const { data, isLoading, isError } = useFetchCategoryQuery()
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true)
-      try {
-        const data = await fetchCategories()
-        setCategories(data)
-      } catch (error) {
-        console.error('Error fetching categories:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-    fetchData()
-  }, [])
-
-  if (loading) {
+  if (isLoading) {
     return <div className="ml-32">Loading...</div>
+  }
+  if (isError) {
+    return <div className="ml-32">Error Occured!</div>
   }
 
   return (
     <div className="px-4 overflow-x-scroll scrollbar-hide">
       <div className="flex gap-4 md:gap-8">
-        {categories.map((item) => (
+        {data?.map((item) => (
           <Link
             href={`/list?category=${item.id}`}
             className="flex-shrink-0 w-full sm:w-1/2 lg:w-1/4 xl:w-1/6"
