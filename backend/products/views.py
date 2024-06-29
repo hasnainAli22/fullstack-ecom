@@ -1,6 +1,6 @@
 # products/views.py
 
-from rest_framework import permissions, viewsets, status
+from rest_framework import permissions, viewsets, status, filters
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from django.core.files.uploadedfile import InMemoryUploadedFile
@@ -40,7 +40,7 @@ class ProductViewSet(viewsets.ModelViewSet):
     CRUD Products
     """
     queryset = Product.objects.all()
-    filter_backends = [DjangoFilterBackend]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['category',] 
     search_fields = ['name',]  
     ordering_fields = ['price', 'name']  

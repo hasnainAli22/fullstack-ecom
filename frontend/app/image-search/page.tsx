@@ -1,12 +1,11 @@
-// pages/image-search.tsx
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import DOMPurify from 'isomorphic-dompurify'
 import ImageUploadForm from '@/components/ImageUploadForm'
-import { Product } from '@/lib/api'
+import { Product } from '@/redux/product/productApiSlice'
 
 const ImageSearch = () => {
   const [products, setProducts] = useState<Product[]>([])

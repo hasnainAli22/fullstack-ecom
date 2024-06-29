@@ -1,6 +1,5 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import DOMPurify from 'isomorphic-dompurify'
@@ -14,9 +13,16 @@ const ProductList = ({
   categoryId?: number
   searchParams?: any
 }) => {
-  const { data, isLoading, isError } = useFetchProductsQuery(categoryId)
+  const search =
+    searchParams?.search?.trim() === '' ? undefined : searchParams?.search
+  console.log(`search:${search}`)
+
+  const { data, isLoading, isError } = useFetchProductsQuery({
+    categoryId,
+    search,
+  })
   if (isError) {
-    return <div>ERROR OCCURED!</div>
+    return <div>Error Occured while fetching data!</div>
   }
 
   if (isLoading) {

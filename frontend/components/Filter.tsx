@@ -1,7 +1,7 @@
 'use client'
 
 interface FilterProps {
-  categories: any[] //
+  categories: any[] | undefined
   selectedCategory: number | undefined
   onCategoryChange: (category: number | undefined) => void
 }
@@ -23,7 +23,7 @@ const Filter: React.FC<FilterProps> = ({
           value={selectedCategory}
         >
           <option>Select Catagory</option>
-          {categories.map((category) => (
+          {categories?.map((category) => (
             <option key={category.id} value={category.id}>
               {category.name}
             </option>

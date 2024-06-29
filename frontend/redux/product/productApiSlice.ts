@@ -24,9 +24,16 @@ export interface Category {
 
 export const productApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
-    fetchProducts: builder.query<Product[], number | undefined>({
-      query: (categoryId) => {
+    fetchProducts: builder.query<
+      Product[],
+      { categoryId?: number; search?: string }
+    >({
+      query: ({ categoryId, search }) => {
         let url = '/products/products/'
+
+        if (search !== undefined) {
+          url += `?search=${search}`
+        }
 
         if (!Number.isNaN(categoryId) && categoryId !== undefined) {
           url += `?category=${categoryId}`
