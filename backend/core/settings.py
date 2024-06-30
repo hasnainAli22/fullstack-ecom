@@ -35,7 +35,6 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 DEBUG = os.environ.get("DEBUG")
 
 ALLOWED_HOSTS = ['.localhost','.0.0.0.0','127.0.0.1']
-# ALLOWED_HOSTS = ['localhost', '127.0.0.1']
 
 
 # Application definition
@@ -53,11 +52,10 @@ INSTALLED_APPS = [
     'storages',
     'social_django',
     'users',
-    # My Applications
-    # "users",
-    # "accounts",
     "django_filters",
     "products",
+    #swagger
+    'drf_spectacular',
     
 ]
 
@@ -181,6 +179,7 @@ REST_FRAMEWORK = {
         'rest_framework.filters.SearchFilter',
         'rest_framework.filters.OrderingFilter',
     ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 DJOSER = {
