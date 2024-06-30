@@ -3,23 +3,37 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { useState } from 'react'
-import { useLogoutMutation } from '@/redux/features/authApiSlice'
+import { useEffect, useState } from 'react'
+import { useLogoutMutation} from '@/redux/features/authApiSlice';
+import {useGetCartQuery} from "@/redux/product/productApiSlice"
+import {setCart} from "@/redux/features/cartSlice";
 import { logout as setLogout } from '@/redux/features/authSlice'
 import { useAppSelector, useAppDispatch } from '@/redux/hooks'
 import CartModel from './CartModel'
+import { useDispatch } from 'react-redux'
 
 const NavIcons = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false)
   const [isCartOpen, setIsCartOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-
+  
   const router = useRouter()
   const pathName = usePathname()
-  const { isAuthenticated } = useAppSelector((state) => state.auth)
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
+  const cartItems = useAppSelector((state) => state.cart.items);
 
-  const dispatch = useAppDispatch()
-  const [logout] = useLogoutMutation()
+  const { data: cart, error, isLoading:isCartLoading} = useGetCartQuery();
+  // const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
+  useEffect(() => {
+    if (cart) {
+      dispatch(setCart(cart.items));
+    }
+  }, [cart, dispatch]);
+  // const cartItems = useAppSelector((state) => state.cart.items);
+
+  const [logout] = useLogoutMutation();
+
 
   const handleProfile = () => {
     if (!isAuthenticated) {
@@ -40,17 +54,16 @@ const NavIcons = () => {
     setIsLoading(false)
   }
 
-  //   const { cart, counter, getCart } = useCartStore();
 
-  //   useEffect(() => {
-  //     getCart(wixClient);
-  //   }, [wixClient, getCart]);
 
-  return (
-    <div className="flex items-center gap-4 xl:gap-6 relative">
+// Calculate total quantity of items in the cart
+const itemCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+const Profile = ()=>{
+    return (
+      <>
       <Image
         src="/profile.png"
-        alt=""
+        alt="Profile"
         width={22}
         height={22}
         className="cursor-pointer"
@@ -64,13 +77,26 @@ const NavIcons = () => {
           </div>
         </div>
       )}
+    </>
+    )
+
+  }
+
+  return (
+    <div className="flex items-center gap-4 xl:gap-6 relative">
+      {isAuthenticated ? (
+        <Profile />
+      ):<Link href="/auth/login">Login</Link>
+      
+      }
+      
       <div
         className="relative cursor-pointer"
         onClick={() => setIsCartOpen((prev) => !prev)}
       >
         <Image src="/cart.png" alt="" width={22} height={22} />
         <div className="absolute -top-4 -right-4 w-6 h-6 bg-lama rounded-full text-white text-sm flex items-center justify-center">
-          {/* {counter} */} {0}
+          {itemCount}
         </div>
       </div>
       {isCartOpen && <CartModel />}

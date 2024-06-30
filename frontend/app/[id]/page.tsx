@@ -3,7 +3,7 @@
 import Add from '@/components/Add'
 import Image from 'next/image'
 import { Suspense } from 'react'
-import { useFetchProductsByIdQuery } from '@/redux/product/productApiSlice'
+import { Product, useFetchProductsByIdQuery } from '@/redux/product/productApiSlice'
 
 const SinglePage = ({ params }: { params: { id: number } }) => {
   const productId = params.id
@@ -45,8 +45,9 @@ const SinglePage = ({ params }: { params: { id: number } }) => {
             </h2>
           </div>
         )}
+        
         <Add
-          product={product}
+          product={product as Product}
           productId={product?.id!}
           stockNumber={product?.quantity || 0}
         />
