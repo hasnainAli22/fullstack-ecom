@@ -54,6 +54,8 @@ INSTALLED_APPS = [
     'users',
     "django_filters",
     "products",
+    # "checkout",
+    # "orders",
     #swagger
     'drf_spectacular',
     
@@ -286,6 +288,8 @@ FRONTEND_DOMAIN = os.environ.get("FRONTEND_DOMAIN")
 
 PAYMENT_SUCCESS_URL = os.environ.get("PAYMENT_SUCCESS_URL")
 PAYMENT_CANCEL_URL = os.environ.get("PAYMENT_CANCEL_URL")
+
+
 
 # Celery
 # CELERY_BROKER_URL = os.environ.get("CELERY_BROKER_URL")

@@ -8,8 +8,9 @@ from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView, Sp
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('api/', include('djoser.urls')),
-    path("api/", include("users.urls"), name="users"),
+    path("api/", include("users.urls"), name="users"),#
     path("api/products/", include("products.urls", namespace="products")),
+    # path("api/", include('checkout.urls', namespace="checkout")),
     #swagger 
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     path('api/schema/swagger-ui/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
