@@ -6,19 +6,10 @@ import {
   useRemoveItemFromCartMutation,
 } from '@/redux/product/productApiSlice'
 import { toast } from 'react-toastify'
-// import { useDispatch } from 'react-redux'
-// import { setCart } from '@/redux/features/cartSlice'
-// import { useEffect } from 'react'
 
 const CartModal = () => {
   const { data: cart, isLoading, refetch } = useGetCartQuery()
   const [removeItemFromCart] = useRemoveItemFromCartMutation()
-  // const dispatch = useDispatch()
-  // useEffect(() => {
-  //   if (cart) {
-  //     dispatch(setCart(cart.items))
-  //   }
-  // }, [cart, dispatch])
 
   const handleRemove = (productId: number) => {
     removeItemFromCart({ productId })
@@ -27,6 +18,18 @@ const CartModal = () => {
         refetch()
         toast.success('Removed from cart')
       })
+  }
+
+  //subtotal
+  const calculateSubtotal = () => {
+    if (!cart || !cart.items) return 0
+    return cart.items
+      .reduce((total, item) => {
+        const itemTotal =
+          parseFloat(item.product.discounted_price) * item.quantity
+        return total + itemTotal
+      }, 0)
+      .toFixed(2)
   }
 
   return (
@@ -89,7 +92,7 @@ const CartModal = () => {
           <div className="">
             <div className="flex items-center justify-between font-semibold">
               <span className="">Subtotal</span>
-              <span className="">${'20'}</span>
+              <span className="">${calculateSubtotal()}</span>
             </div>
             <p className="text-gray-500 text-sm mt-2 mb-4">
               Shipping and taxes calculated at checkout.
