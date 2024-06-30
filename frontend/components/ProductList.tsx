@@ -15,7 +15,6 @@ const ProductList = ({
 }) => {
   const search =
     searchParams?.search?.trim() === '' ? undefined : searchParams?.search
-  console.log(`search:${search}`)
 
   const { data, isLoading, isError } = useFetchProductsQuery({
     categoryId,

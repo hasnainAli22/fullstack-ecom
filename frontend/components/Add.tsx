@@ -7,8 +7,6 @@ import {
 } from '@/redux/product/productApiSlice'
 import { useState } from 'react'
 import { toast } from 'react-toastify'
-// import { useDispatch } from 'react-redux'
-// import { addToCart } from '@/redux/features/cartSlice'
 interface AddProps {
   product: Product
   productId: number
@@ -17,7 +15,6 @@ interface AddProps {
 
 const Add: React.FC<AddProps> = ({ product, productId, stockNumber }) => {
   const [quantity, setQuantity] = useState(1)
-  //const dispatch = useDispatch()
   const [addItemToCart] = useAddItemToCartMutation()
   const { refetch } = useGetCartQuery()
 
@@ -31,13 +28,6 @@ const Add: React.FC<AddProps> = ({ product, productId, stockNumber }) => {
   }
 
   const handleAddToCart = async (productId: number) => {
-    // const cartProduct = {
-    //   id: product.id,
-    //   name: product.name,
-    //   image: product.image,
-    //   price: product.price,
-    //   quantity: product.quantity,
-    // }
     try {
       const cartItem = await addItemToCart({ productId, quantity })
         .unwrap()
@@ -45,8 +35,6 @@ const Add: React.FC<AddProps> = ({ product, productId, stockNumber }) => {
           refetch()
           toast.success('Added to Cart')
         })
-      //dispatch(addToCart({ product, quantity }))
-      console.log('Added to cart:', cartItem)
     } catch (error) {
       console.error('Failed to add to cart:', error)
     }
