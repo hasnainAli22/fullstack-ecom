@@ -1,47 +1,56 @@
-// components/Add.js
-'use client';
+'use client'
 
-import {Product, useAddItemToCartMutation } from '@/redux/product/productApiSlice';
-import { useAppDispatch } from '@/redux/hooks';
-import { useState } from 'react';
-import { addToCart } from '@/redux/features/cartSlice';
+import {
+  Product,
+  useAddItemToCartMutation,
+  useGetCartQuery,
+} from '@/redux/product/productApiSlice'
+import { useState } from 'react'
+import { toast } from 'react-toastify'
+// import { useDispatch } from 'react-redux'
+// import { addToCart } from '@/redux/features/cartSlice'
 interface AddProps {
-  product: Product;
-  productId: number;
-  stockNumber: number;
+  product: Product
+  productId: number
+  stockNumber: number
 }
 
-const Add: React.FC<AddProps> = ({ product, productId, stockNumber })=> {
-  const [quantity, setQuantity] = useState(1);
-  const dispatch = useAppDispatch();
-  const [addItemToCart] = useAddItemToCartMutation();
+const Add: React.FC<AddProps> = ({ product, productId, stockNumber }) => {
+  const [quantity, setQuantity] = useState(1)
+  //const dispatch = useDispatch()
+  const [addItemToCart] = useAddItemToCartMutation()
+  const { refetch } = useGetCartQuery()
 
-  const handleQuantity = (type:string) => {
+  const handleQuantity = (type: string) => {
     if (type === 'd' && quantity > 1) {
-      setQuantity(prev => prev - 1);
+      setQuantity((prev) => prev - 1)
     }
     if (type === 'i' && quantity < stockNumber) {
-      setQuantity(prev => prev + 1);
+      setQuantity((prev) => prev + 1)
     }
-  };
+  }
 
-  const handleAddToCart = async (productId:number) => {
-    const cartProduct = {
-      id: product.id,
-      name: product.name,
-      image: product.image,
-      price: product.price,
-      quantity: product.quantity
-
-    }
+  const handleAddToCart = async (productId: number) => {
+    // const cartProduct = {
+    //   id: product.id,
+    //   name: product.name,
+    //   image: product.image,
+    //   price: product.price,
+    //   quantity: product.quantity,
+    // }
     try {
-      const cartItem = await addItemToCart({ productId, quantity }).unwrap();
-      dispatch(addToCart({ product, quantity }));
-      console.log('Added to cart:', cartItem);
+      const cartItem = await addItemToCart({ productId, quantity })
+        .unwrap()
+        .then(() => {
+          refetch()
+          toast.success('Added to Cart')
+        })
+      //dispatch(addToCart({ product, quantity }))
+      console.log('Added to cart:', cartItem)
     } catch (error) {
-      console.error('Failed to add to cart:', error);
+      console.error('Failed to add to cart:', error)
     }
-  };
+  }
 
   return (
     <div className="flex flex-col gap-4">
@@ -69,7 +78,10 @@ const Add: React.FC<AddProps> = ({ product, productId, stockNumber })=> {
             <div className="text-xs">Product is out of stock</div>
           ) : (
             <div className="text-xs">
-              Only <span className="text-orange-500">{stockNumber} items</span> left!<br />{"Don't"} miss it
+              Only <span className="text-orange-500">{stockNumber} items</span>{' '}
+              left!
+              <br />
+              {"Don't"} miss it
             </div>
           )}
         </div>
@@ -81,7 +93,7 @@ const Add: React.FC<AddProps> = ({ product, productId, stockNumber })=> {
         </button>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default Add;
+export default Add

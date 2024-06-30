@@ -1,58 +1,33 @@
-"use client";
+'use client'
 
-import Image from "next/image";
-import { useGetCartQuery, useRemoveItemFromCartMutation } from '@/redux/product/productApiSlice';
-import { useDispatch } from 'react-redux';
-import { setCart } from '@/redux/features/cartSlice';
-import { useEffect } from "react";
+import Image from 'next/image'
+import {
+  useGetCartQuery,
+  useRemoveItemFromCartMutation,
+} from '@/redux/product/productApiSlice'
+import { toast } from 'react-toastify'
+// import { useDispatch } from 'react-redux'
+// import { setCart } from '@/redux/features/cartSlice'
+// import { useEffect } from 'react'
 
 const CartModal = () => {
-  // TEMPORARY
-  // const cartItems = true;
-
-  // const wixClient = useWixClient();
-  // const { cart, isLoading, removeItem } = useCartStore();
-  const { data: cart, isLoading } = useGetCartQuery();
-  const [removeItemFromCart] = useRemoveItemFromCartMutation();
-  const dispatch = useDispatch();
-  useEffect(() => {
-    if (cart) {
-      dispatch(setCart(cart.items));
-    }
-  }, [cart, dispatch])
-  
+  const { data: cart, isLoading, refetch } = useGetCartQuery()
+  const [removeItemFromCart] = useRemoveItemFromCartMutation()
+  // const dispatch = useDispatch()
+  // useEffect(() => {
+  //   if (cart) {
+  //     dispatch(setCart(cart.items))
+  //   }
+  // }, [cart, dispatch])
 
   const handleRemove = (productId: number) => {
-    removeItemFromCart({ productId });
-  };
-
-
-
-/*
-  const handleCheckout = async () => {
-    try {
-      const checkout =
-        await wixClient.currentCart.createCheckoutFromCurrentCart({
-          channelType: currentCart.ChannelType.WEB,
-        });
-
-      const { redirectSession } =
-        await wixClient.redirects.createRedirectSession({
-          ecomCheckout: { checkoutId: checkout.checkoutId },
-          callbacks: {
-            postFlowUrl: window.location.origin,
-            thankYouPageUrl: `${window.location.origin}/success`,
-          },
-        });
-
-      if (redirectSession?.fullUrl) {
-        window.location.href = redirectSession.fullUrl;
-      }
-    } catch (err) {
-      console.log(err);
-    }/*
-  };
-  */
+    removeItemFromCart({ productId })
+      .unwrap()
+      .then(() => {
+        refetch()
+        toast.success('Removed from cart')
+      })
+  }
 
   return (
     <div className="w-max absolute p-4 rounded-md shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white top-12 right-0 flex flex-col gap-6 z-20">
@@ -80,13 +55,11 @@ const CartModal = () => {
                   <div className="">
                     {/* TITLE */}
                     <div className="flex items-center justify-between gap-8">
-                      <h3 className="font-semibold">
-                        {item.product.name}
-                      </h3>
+                      <h3 className="font-semibold">{item.product.name}</h3>
                       <div className="p-1 bg-gray-50 rounded-sm flex items-center gap-2">
                         {item.quantity && item.quantity > 1 && (
                           <div className="text-xs text-green-500">
-                            {item.quantity} x{" "}
+                            {item.quantity} x{' '}
                           </div>
                         )}
                         ${item.product.discounted_price}
@@ -94,7 +67,7 @@ const CartModal = () => {
                     </div>
                     {/* DESC */}
                     <div className="text-sm text-gray-500">
-                      {item.product.quantity? "Available": "Not Available"}
+                      {item.product.quantity ? 'Available' : 'Not Available'}
                     </div>
                   </div>
                   {/* BOTTOM */}
@@ -102,7 +75,7 @@ const CartModal = () => {
                     <span className="text-gray-500">Qty. {item.quantity}</span>
                     <span
                       className="text-blue-500"
-                      style={{ cursor: isLoading ? "not-allowed" : "pointer" }}
+                      style={{ cursor: isLoading ? 'not-allowed' : 'pointer' }}
                       onClick={() => handleRemove(item.product.id)}
                     >
                       Remove
@@ -116,7 +89,7 @@ const CartModal = () => {
           <div className="">
             <div className="flex items-center justify-between font-semibold">
               <span className="">Subtotal</span>
-              <span className="">${"20"}</span>
+              <span className="">${'20'}</span>
             </div>
             <p className="text-gray-500 text-sm mt-2 mb-4">
               Shipping and taxes calculated at checkout.
@@ -128,7 +101,7 @@ const CartModal = () => {
               <button
                 className="rounded-md py-3 px-4 bg-black text-white disabled:cursor-not-allowed disabled:opacity-75"
                 disabled={isLoading}
-                onClick={()=>{}}
+                onClick={() => {}}
               >
                 Checkout
               </button>
@@ -137,7 +110,7 @@ const CartModal = () => {
         </>
       )}
     </div>
-  );
-};
+  )
+}
 
-export default CartModal;
+export default CartModal
