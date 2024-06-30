@@ -1,7 +1,7 @@
 # products/serializers.py
 
 from rest_framework import serializers
-from products.models import Product, ProductCategory, CartItem, Order, OrderItem
+from products.models import Product, ProductCategory,Cart, CartItem
 from products.utils import extract_features_from_image, serialize_features
 
 class ProductCategoryReadSerializer(serializers.ModelSerializer):
@@ -79,24 +79,21 @@ class ImageSearchSerializer(serializers.Serializer):
         if not value:
             raise serializers.ValidationError("No image uploaded.")
         return value
-    
-    
+
+class ProductSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields = ['id', 'name', 'image', 'discounted_price', 'quantity']
+
 class CartItemSerializer(serializers.ModelSerializer):
+    product = ProductSerializer()
     class Meta:
         model = CartItem
-        fields = '__all__'
+        fields = ['id', 'product', 'quantity', 'cart']
 
-class OrderSerializer(serializers.ModelSerializer):
-    items = serializers.SerializerMethodField()
+class CartSerializer(serializers.ModelSerializer):
+    items = CartItemSerializer(many=True, read_only=True)
 
     class Meta:
-        model = Order
-        fields = '__all__'
-
-    def get_items(self, obj):
-        return OrderItemSerializer(obj.items.all(), many=True).data
-
-class OrderItemSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = OrderItem
-        fields = '__all__'
+        model = Cart
+        fields = ['id', 'user', 'created_at', 'items']

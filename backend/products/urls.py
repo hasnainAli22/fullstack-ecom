@@ -4,8 +4,7 @@ from products.views import (
     ProductCategoryViewSet,
     ProductViewSet,
     ImageSearchView,
-    CartItemViewSet,
-    OrderViewSet
+    CartViewSet,
 )
 
 app_name = "products"
@@ -13,9 +12,7 @@ app_name = "products"
 router = DefaultRouter()
 router.register(r"categories", ProductCategoryViewSet)
 router.register(r"products", ProductViewSet)
-router.register(r'cart-items', CartItemViewSet)
-router.register(r'orders', OrderViewSet)
-
+router.register(r'carts', CartViewSet, basename='cart')
 
 urlpatterns = [
     path("", include(router.urls)),
