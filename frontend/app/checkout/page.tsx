@@ -2,19 +2,24 @@
 
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { useGetCartQuery } from '@/redux/product/productApiSlice'
+import {
+  useGetCartQuery,
+  useClearCartMutation,
+} from '@/redux/product/productApiSlice'
 import {
   useRetrieveUserQuery,
   useRetrieveUserAddressQuery,
 } from '@/redux/features/authApiSlice'
 import { Spinner } from '@/components/common'
+import { toast } from 'react-toastify'
 
 const Checkout = () => {
   const router = useRouter()
   const { data: user, isLoading: isUserLoading } = useRetrieveUserQuery()
   const { data: address, isLoading: isAddressLoading } =
     useRetrieveUserAddressQuery()
-  const { data: cart } = useGetCartQuery()
+  const { data: cart, refetch } = useGetCartQuery()
+  const [clearCart] = useClearCartMutation()
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -63,13 +68,21 @@ const Checkout = () => {
     e.preventDefault()
     // Perform checkout process here
     // You can use dispatch to send the form data and cart items to your backend
-    if (paymentMethod === 'cash') {
-      router.push('/success')
+    if (paymentMethod === 'stripe') {
+      toast.error('Under Development!')
     }
     try {
       // Example: dispatch an action to process the checkout
       // await dispatch(processCheckout({ formData, cartItems, paymentMethod })).unwrap();
       //router.push('/confirmation') // Redirect to a confirmation page
+      if (paymentMethod === 'cash') {
+        await clearCart()
+          .unwrap()
+          .then(() => {
+            refetch()
+          })
+        router.push('/success')
+      }
     } catch (error) {
       console.error('Checkout failed:', error)
     }

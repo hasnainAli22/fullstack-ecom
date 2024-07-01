@@ -34,6 +34,21 @@ const CartModal = () => {
       .toFixed(2)
   }
 
+  const handleCheckout = () => {
+    if (!cart?.items) return
+
+    const isOutOfStock = cart.items.some(
+      (item) => item.quantity > item.product.quantity
+    )
+
+    if (isOutOfStock) {
+      toast.error('One or more items in your cart exceed the available stock.')
+      return
+    }
+
+    router.push('/checkout')
+  }
+
   return (
     <div className="w-max absolute p-4 rounded-md shadow-[0_3px_10px_rgb(0,0,0,0.2)] bg-white top-12 right-0 flex flex-col gap-6 z-20">
       {!cart?.items.length ? (
@@ -100,15 +115,16 @@ const CartModal = () => {
               Shipping and taxes calculated at checkout.
             </p>
             <div className="flex justify-between text-sm">
-              <button className="rounded-md py-3 px-4 ring-1 ring-gray-300">
-                View Cart
+              <button
+                onClick={() => {}}
+                className="rounded-md py-3 px-4 ring-1 ring-gray-300"
+              >
+                Empty
               </button>
               <button
                 className="rounded-md py-3 px-4 bg-black text-white disabled:cursor-not-allowed disabled:opacity-75"
                 disabled={isLoading}
-                onClick={() => {
-                  router.push('/checkout')
-                }}
+                onClick={handleCheckout}
               >
                 Checkout
               </button>

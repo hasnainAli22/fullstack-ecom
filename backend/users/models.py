@@ -61,7 +61,7 @@ class UserAccount(AbstractBaseUser, PermissionsMixin):
     
 
 class Address(models.Model):
-    user = models.ForeignKey(UserAccount, related_name="addresses", on_delete=models.CASCADE)
+    user = models.OneToOneField(UserAccount, related_name="addresses", on_delete=models.CASCADE)
     default = models.BooleanField(default=False)
     city = models.CharField(max_length=100)
     street_address = models.CharField(max_length=100)

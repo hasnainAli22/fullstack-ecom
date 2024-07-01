@@ -130,3 +130,13 @@ class CartViewSet(viewsets.ModelViewSet):
         
         serializer = self.get_serializer(cart)
         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+    @action(detail=False, methods=['post'], url_path='clear-cart')
+    def clear_cart(self, request):
+        user = request.user
+        cart = Cart.objects.get(user=user)
+        
+        cart.items.all().delete()
+        
+        serializer = self.get_serializer(cart)
+        return Response(serializer.data, status=status.HTTP_200_OK)

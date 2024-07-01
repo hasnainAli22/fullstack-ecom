@@ -59,7 +59,7 @@ const ProductList = ({
                   }}
                 ></div>
               )}
-              <button className="rounded-2xl ring-1 ring-lama text-lama w-max py-2 px-4 text-xs hover:bg-lama hover:text-white">
+              <button className="mt-auto rounded-2xl ring-1 ring-lama text-lama w-max py-2 px-4 text-xs hover:bg-lama hover:text-white">
                 Add to Cart
               </button>
             </Link>

@@ -23,27 +23,26 @@ export interface Category {
 }
 // types.ts
 export interface CartProduct {
-  id: number;
-  name: string;
-  image: string;
-  discounted_price: string;
-  quantity: number;
+  id: number
+  name: string
+  image: string
+  discounted_price: string
+  quantity: number
 }
 
 export interface CartItem {
-  id?: number;
-  product: CartProduct;
-  quantity: number;
-  cart?: number;
+  id?: number
+  product: CartProduct
+  quantity: number
+  cart?: number
 }
 
 export interface Cart {
-  id: number;
-  user: number;
-  created_at: string;
-  items: CartItem[];
+  id: number
+  user: number
+  created_at: string
+  items: CartItem[]
 }
-
 
 export const productApi = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
@@ -74,7 +73,10 @@ export const productApi = apiSlice.injectEndpoints({
     getCart: builder.query<Cart, void>({
       query: () => '/products/carts/my-cart/',
     }),
-    addItemToCart: builder.mutation<Cart, { productId: number; quantity: number }>({
+    addItemToCart: builder.mutation<
+      Cart,
+      { productId: number; quantity: number }
+    >({
       query: ({ productId, quantity }) => ({
         url: '/products/carts/add-item/',
         method: 'POST',
@@ -88,7 +90,12 @@ export const productApi = apiSlice.injectEndpoints({
         body: { product_id: productId },
       }),
     }),
-    
+    clearCart: builder.mutation<void, void>({
+      query: () => ({
+        url: '/products/carts/clear-cart/',
+        method: 'POST',
+      }),
+    }),
   }),
 })
 
@@ -99,4 +106,5 @@ export const {
   useGetCartQuery,
   useAddItemToCartMutation,
   useRemoveItemFromCartMutation,
+  useClearCartMutation,
 } = productApi
