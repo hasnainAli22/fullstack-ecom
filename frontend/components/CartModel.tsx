@@ -6,8 +6,10 @@ import {
   useRemoveItemFromCartMutation,
 } from '@/redux/product/productApiSlice'
 import { toast } from 'react-toastify'
+import { useRouter } from 'next/navigation'
 
 const CartModal = () => {
+  const router = useRouter()
   const { data: cart, isLoading, refetch } = useGetCartQuery()
   const [removeItemFromCart] = useRemoveItemFromCartMutation()
 
@@ -104,7 +106,9 @@ const CartModal = () => {
               <button
                 className="rounded-md py-3 px-4 bg-black text-white disabled:cursor-not-allowed disabled:opacity-75"
                 disabled={isLoading}
-                onClick={() => {}}
+                onClick={() => {
+                  router.push('/checkout')
+                }}
               >
                 Checkout
               </button>

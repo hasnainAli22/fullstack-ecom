@@ -2,12 +2,15 @@ from django.conf import settings
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework import permissions
 from djoser.social.views import ProviderAuthView
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
     TokenVerifyView
 )
+from .models import Address
+from .serializers import AddressSerializer
 
 
 class CustomProviderAuthView(ProviderAuthView):
@@ -112,3 +115,12 @@ class LogoutView(APIView):
         response.delete_cookie('refresh')
 
         return response
+    
+class AddressView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get(self, request, *args, **kwargs):
+        address = Address.objects.filter(user=request.user).first()
+
+        serializer = AddressSerializer(address)
+        return Response(serializer.data, status=status.HTTP_200_OK)

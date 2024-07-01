@@ -1,154 +1,275 @@
-"use client"
+'use client'
 
-import { useEffect, useState } from 'react';
-import { useAppSelector, useAppDispatch } from '@/redux/hooks';
-import { useRouter } from 'next/navigation';
-import { useGetCartQuery } from '@/redux/product/productApiSlice';
-import { useRetrieveUserQuery } from '@/redux/features/authApiSlice';
+import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { useGetCartQuery } from '@/redux/product/productApiSlice'
+import {
+  useRetrieveUserQuery,
+  useRetrieveUserAddressQuery,
+} from '@/redux/features/authApiSlice'
+import { Spinner } from '@/components/common'
 
 const Checkout = () => {
-  const dispatch = useAppDispatch();
-  const router = useRouter();
-//   const cartItems = useAppSelector((state) => state.cart.items);
-const { data: user, isLoading:isUserLoading, isFetching } = useRetrieveUserQuery()
-const { data: cart, isLoading, refetch } = useGetCartQuery()
+  const router = useRouter()
+  const { data: user, isLoading: isUserLoading } = useRetrieveUserQuery()
+  const { data: address, isLoading: isAddressLoading } =
+    useRetrieveUserAddressQuery()
+  const { data: cart } = useGetCartQuery()
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     address: '',
     city: '',
-    state: '',
+    landmark: '',
     zip: '',
-  });
-  useEffect(()=>{
+  })
+  const [paymentMethod, setPaymentMethod] = useState('cash')
 
-    if(!isUserLoading){
-        setFormData({
-            name: `${user?.first_name} ${user?.last_name}`,
-            email: `${user?.email}`,
-            address: '',
-            city: '',
-            state: '',
-            zip: '',
-          })
+  useEffect(() => {
+    if (!isUserLoading && !isAddressLoading) {
+      setFormData({
+        name: `${user?.first_name} ${user?.last_name}`,
+        email: `${user?.email}`,
+        address: `${address?.street_address}`,
+        city: `${address?.city}`,
+        landmark: `${address?.apartment_address}`,
+        zip: `${address?.postal_code}`,
+      })
     }
-  },[isUserLoading])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isUserLoading, isAddressLoading])
 
-  const handleChange = (e:any) => {
-    const { name, value } = e.target;
+  if (isUserLoading) {
+    return (
+      <div className="flex justify-center my-8">
+        <Spinner lg />
+      </div>
+    )
+  }
+
+  const handleChange = (e: any) => {
+    const { name, value } = e.target
     setFormData((prevData) => ({
       ...prevData,
       [name]: value,
-    }));
-  };
+    }))
+  }
 
-  const handleSubmit = async (e:any) => {
-    /*
-    e.preventDefault();
+  const handlePaymentChange = (e: any) => {
+    setPaymentMethod(e.target.value)
+  }
+
+  const handleSubmit = async (e: any) => {
+    e.preventDefault()
     // Perform checkout process here
     // You can use dispatch to send the form data and cart items to your backend
+    if (paymentMethod === 'cash') {
+      router.push('/success')
+    }
     try {
       // Example: dispatch an action to process the checkout
-      // await dispatch(processCheckout({ formData, cartItems })).unwrap();
-      router.push('/confirmation'); // Redirect to a confirmation page
+      // await dispatch(processCheckout({ formData, cartItems, paymentMethod })).unwrap();
+      //router.push('/confirmation') // Redirect to a confirmation page
     } catch (error) {
-      console.error('Checkout failed:', error);
+      console.error('Checkout failed:', error)
     }
-    */
-  };
+  }
+
+  const calculateSubtotal = () => {
+    if (!cart || !cart.items) return 0
+    return (
+      cart.items.reduce((total, item) => {
+        const itemTotal =
+          parseFloat(item.product.discounted_price) * item.quantity
+        return total + itemTotal
+      }, 0) + 2
+    ).toFixed(2)
+  }
 
   return (
     <div className="container mx-auto p-4">
       <h1 className="text-2xl font-bold mb-4">Checkout</h1>
-      <form onSubmit={(e)=>{handleSubmit(e)}}>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Name</label>
-            <input
-              type="text"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              disabled
-              className="mt-1 p-2 w-full border border-gray-300 rounded-md"
-              required
-            />
+      <div className="flex flex-col lg:flex-row gap-4">
+        <div className="flex-1">
+          <form
+            onSubmit={(e) => {
+              handleSubmit(e)
+            }}
+          >
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Name
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  disabled
+                  className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  disabled
+                  onChange={handleChange}
+                  className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Address
+                </label>
+                <input
+                  type="text"
+                  name="address"
+                  value={formData.address}
+                  onChange={handleChange}
+                  className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  City
+                </label>
+                <input
+                  type="text"
+                  name="city"
+                  value={formData.city}
+                  onChange={handleChange}
+                  className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Landmark
+                </label>
+                <input
+                  type="text"
+                  name="landmark"
+                  value={formData.landmark}
+                  onChange={handleChange}
+                  className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700">
+                  Zip Code
+                </label>
+                <input
+                  type="text"
+                  name="zip"
+                  value={formData.zip}
+                  onChange={handleChange}
+                  className="mt-1 p-2 w-full border border-gray-300 rounded-md"
+                  required
+                />
+              </div>
+            </div>
+            <div className="mt-4">
+              <h2 className="text-xl font-bold mb-2">Payment Method</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div
+                  className={`p-4 border-2 rounded-md cursor-pointer ${
+                    paymentMethod === 'cash'
+                      ? 'border-blue-500'
+                      : 'border-gray-300'
+                  }`}
+                  onClick={() => setPaymentMethod('cash')}
+                >
+                  <input
+                    type="radio"
+                    id="cash"
+                    name="paymentMethod"
+                    value="cash"
+                    checked={paymentMethod === 'cash'}
+                    onChange={handlePaymentChange}
+                    className="hidden"
+                  />
+                  <label
+                    htmlFor="cash"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Cash on Delivery
+                  </label>
+                </div>
+                <div
+                  className={`p-4 border-2 rounded-md cursor-pointer ${
+                    paymentMethod === 'stripe'
+                      ? 'border-blue-500'
+                      : 'border-gray-300'
+                  }`}
+                  onClick={() => setPaymentMethod('stripe')}
+                >
+                  <input
+                    type="radio"
+                    id="stripe"
+                    name="paymentMethod"
+                    value="stripe"
+                    checked={paymentMethod === 'stripe'}
+                    onChange={handlePaymentChange}
+                    className="hidden"
+                  />
+                  <label
+                    htmlFor="stripe"
+                    className="text-sm font-medium text-gray-700"
+                  >
+                    Stripe
+                  </label>
+                </div>
+              </div>
+            </div>
+            <button
+              type="submit"
+              className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-700 mt-4"
+            >
+              Place Order
+            </button>
+          </form>
+        </div>
+        <div className="flex-1">
+          <h2 className="text-xl font-bold mb-4">Order Summary</h2>
+          <ul className="mb-4">
+            {cart?.items.map((item) => (
+              <li
+                key={item.product.id}
+                className="flex justify-between border-b py-2"
+              >
+                <span>{item.product.name}</span>
+                <span>
+                  {item.quantity} x ${item.product.discounted_price}
+                </span>
+              </li>
+            ))}
+          </ul>
+          <div className="flex items-center justify-between font-medium">
+            <span className="">Shipping</span>
+            <span className="">Standard ${'2.00'}</span>
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Email</label>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              disabled
-              onChange={handleChange}
-              className="mt-1 p-2 w-full border border-gray-300 rounded-md"
-              required
-            />
+          <div className="flex items-center justify-between font-medium">
+            <span className="">Tax</span>
+            <span className="">${'0.00'}</span>
           </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Address</label>
-            <input
-              type="text"
-              name="address"
-              value={formData.address}
-              onChange={handleChange}
-              className="mt-1 p-2 w-full border border-gray-300 rounded-md"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">City</label>
-            <input
-              type="text"
-              name="city"
-              value={formData.city}
-              onChange={handleChange}
-              className="mt-1 p-2 w-full border border-gray-300 rounded-md"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">State</label>
-            <input
-              type="text"
-              name="state"
-              value={formData.state}
-              onChange={handleChange}
-              className="mt-1 p-2 w-full border border-gray-300 rounded-md"
-              required
-            />
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-gray-700">Zip Code</label>
-            <input
-              type="text"
-              name="zip"
-              value={formData.zip}
-              onChange={handleChange}
-              className="mt-1 p-2 w-full border border-gray-300 rounded-md"
-              required
-            />
+          <div className="mt-10 flex items-center justify-between font-semibold border-t">
+            <span className="">Subtotal</span>
+            <span className="">${calculateSubtotal()}</span>
           </div>
         </div>
-        <h2 className="text-xl font-bold mt-8 mb-4">Order Summary</h2>
-        <ul className="mb-4">
-          {cart?.items.map((item) => (
-            <li key={item.product.id} className="flex justify-between border-b py-2">
-              <span>{item.product.name}</span>
-              <span>{item.quantity} x ${item.product.discounted_price}</span>
-            </li>
-          ))}
-        </ul>
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white p-2 rounded-md hover:bg-blue-700"
-        >
-          Place Order
-        </button>
-      </form>
+      </div>
     </div>
-  );
-};
+  )
+}
 
-export default Checkout;
+export default Checkout

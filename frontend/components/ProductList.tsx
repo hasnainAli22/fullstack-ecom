@@ -44,7 +44,7 @@ const ProductList = ({
                   alt={product.name}
                   fill
                   sizes="25vw"
-                  className="absolute object-cover rounded-md z-10 hover:opacity-75 transition-opacity easy duration-500"
+                  className="absolute object-contain rounded-md z-10 hover:opacity-75 transition-opacity easy duration-500"
                 />
               </div>
               <div className="flex justify-between">

@@ -7,21 +7,6 @@ import UpdateButton from '@/components/UpdateButton'
 export default function Page() {
   const { data: user, isLoading, isFetching } = useRetrieveUserQuery()
 
-  const config = [
-    {
-      label: 'First Name',
-      value: user?.first_name,
-    },
-    {
-      label: 'Last Name',
-      value: user?.last_name,
-    },
-    {
-      label: 'Email',
-      value: user?.email,
-    },
-  ]
-
   if (isLoading || isFetching) {
     return (
       <div className="flex justify-center my-8">

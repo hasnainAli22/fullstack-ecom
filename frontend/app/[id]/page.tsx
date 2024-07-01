@@ -3,7 +3,10 @@
 import Add from '@/components/Add'
 import Image from 'next/image'
 import { Suspense } from 'react'
-import { Product, useFetchProductsByIdQuery } from '@/redux/product/productApiSlice'
+import {
+  Product,
+  useFetchProductsByIdQuery,
+} from '@/redux/product/productApiSlice'
 
 const SinglePage = ({ params }: { params: { id: number } }) => {
   const productId = params.id
@@ -24,7 +27,7 @@ const SinglePage = ({ params }: { params: { id: number } }) => {
             alt="product image"
             fill
             sizes="25vw"
-            className="absolute object-cover rounded-md z-10 hover:opacity-75 transition-opacity easy duration-500"
+            className="absolute object-contain rounded-md z-10 hover:opacity-75 transition-opacity easy duration-500"
           />
         </div>
       </div>
@@ -45,7 +48,7 @@ const SinglePage = ({ params }: { params: { id: number } }) => {
             </h2>
           </div>
         )}
-        
+
         <Add
           product={product as Product}
           productId={product?.id!}
