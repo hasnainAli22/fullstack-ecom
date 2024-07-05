@@ -22,7 +22,6 @@ from products.serializers import (
     CartSerializer,
     CartItemSerializer,
     # OrderSerializer,
-    
     )
 from django_filters.rest_framework import DjangoFilterBackend
 

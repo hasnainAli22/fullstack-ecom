@@ -33,8 +33,9 @@ export default function useLogin() {
         toast.success('Logged in')
         router.push('/dashboard')
       })
-      .catch(() => {
-        toast.error('Failed to log in')
+      .catch((e) => {
+        console.log(e)
+        toast.error(`Failed to login! ${e.data.detail}`)
       })
   }
 

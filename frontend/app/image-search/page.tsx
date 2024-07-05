@@ -6,6 +6,7 @@ import Link from 'next/link'
 import DOMPurify from 'isomorphic-dompurify'
 import ImageUploadForm from '@/components/ImageUploadForm'
 import { Product } from '@/redux/product/productApiSlice'
+import { Spinner } from '@/components/common'
 
 const ImageSearch = () => {
   const [products, setProducts] = useState<Product[]>([])
@@ -36,7 +37,11 @@ const ImageSearch = () => {
   }
 
   if (isLoading) {
-    return <div className="ml-4">Loading...</div>
+    return (
+      <div className="flex justify-center">
+        <Spinner lg />
+      </div>
+    )
   }
 
   return (
