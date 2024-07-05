@@ -3,6 +3,7 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import DOMPurify from 'isomorphic-dompurify'
+import { Spinner } from './common'
 //import Pagination from './Pagination'
 import { useFetchProductsQuery, Product } from '@/redux/product/productApiSlice'
 
@@ -25,7 +26,11 @@ const ProductList = ({
   }
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return (
+      <div className="flex justify-center">
+        <Spinner />
+      </div>
+    )
   }
 
   return (

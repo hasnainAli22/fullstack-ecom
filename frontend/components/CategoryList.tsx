@@ -7,15 +7,20 @@ import {
   Category,
   useFetchCategoryQuery,
 } from '@/redux/product/productApiSlice'
+import { Spinner } from './common'
 
 const CategoryList = () => {
   const { data, isLoading, isError } = useFetchCategoryQuery()
 
   if (isLoading) {
-    return <div className="ml-32">Loading...</div>
+    return (
+      <div className="flex justify-center">
+        <Spinner />
+      </div>
+    )
   }
   if (isError) {
-    return <div className="ml-32">Error Occured!</div>
+    return <div className="ml-32">Error Loading Catagories</div>
   }
 
   return (
