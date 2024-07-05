@@ -7,16 +7,21 @@ import {
   Product,
   useFetchProductsByIdQuery,
 } from '@/redux/product/productApiSlice'
+import { Spinner } from '@/components/common'
 
 const SinglePage = ({ params }: { params: { id: number } }) => {
   const productId = params.id
   const { data, isLoading, isError } = useFetchProductsByIdQuery(productId)
   const product = data
   if (isLoading) {
-    return <div>Loading...</div>
+    return (
+      <div className="flex justify-center">
+        <Spinner lg />
+      </div>
+    )
   }
   if (isError) {
-    return <div>Some Error Occurded...</div>
+    return <div>Error Loading Product</div>
   }
   return (
     <div className="px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64 relative flex flex-col lg:flex-row gap-16">

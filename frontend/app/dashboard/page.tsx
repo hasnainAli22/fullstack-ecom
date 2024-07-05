@@ -46,10 +46,10 @@ export default function Page() {
           <UpdateButton />
         </form>
       </div>
-      <div className="w-full md:w-1/2">
+      {/* <div className="w-full md:w-1/2">
         <h1 className="text-2xl">Orders</h1>
         <div className="mt-12 flex flex-col">
-          {/* {orderRes.orders.map((order) => (
+          {orderRes.orders.map((order) => (
             <Link
               href={`/orders/${order._id}`}
               key={order._id}
@@ -64,9 +64,9 @@ export default function Page() {
               )}
               <span className="w-1/4">{order.status}</span>
             </Link>
-          ))} */}
+          ))}
         </div>
-      </div>
+      </div> */}
     </div>
   )
 }
