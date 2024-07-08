@@ -67,6 +67,13 @@ export const productApi = apiSlice.injectEndpoints({
     fetchProductsById: builder.query<Product, number>({
       query: (productId) => `/products/products/${productId}`,
     }),
+    searchProductsByImage: builder.mutation<Product[], FormData>({
+      query: (formData) => ({
+        url: '/products/search_with_image/',
+        method: 'POST',
+        body: formData,
+      }),
+    }),
     fetchCategory: builder.query<Category[], void>({
       query: () => `/products/categories/`,
     }),
@@ -102,6 +109,7 @@ export const productApi = apiSlice.injectEndpoints({
 export const {
   useFetchProductsQuery,
   useFetchProductsByIdQuery,
+  useSearchProductsByImageMutation,
   useFetchCategoryQuery,
   useGetCartQuery,
   useAddItemToCartMutation,

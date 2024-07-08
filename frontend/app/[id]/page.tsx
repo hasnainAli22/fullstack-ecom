@@ -3,10 +3,7 @@
 import Add from '@/components/Add'
 import Image from 'next/image'
 import { Suspense } from 'react'
-import {
-  Product,
-  useFetchProductsByIdQuery,
-} from '@/redux/product/productApiSlice'
+import { useFetchProductsByIdQuery } from '@/redux/product/productApiSlice'
 import { Spinner } from '@/components/common'
 
 const SinglePage = ({ params }: { params: { id: number } }) => {
@@ -54,11 +51,7 @@ const SinglePage = ({ params }: { params: { id: number } }) => {
           </div>
         )}
 
-        <Add
-          product={product as Product}
-          productId={product?.id!}
-          stockNumber={product?.quantity || 0}
-        />
+        <Add productId={product?.id!} stockNumber={product?.quantity || 0} />
 
         {/* <div className="h-[2px] bg-gray-100" />
         

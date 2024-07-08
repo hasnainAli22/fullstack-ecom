@@ -1,22 +1,22 @@
 'use client'
 
 import {
-  Product,
   useAddItemToCartMutation,
   useGetCartQuery,
 } from '@/redux/product/productApiSlice'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { toast } from 'react-toastify'
+import { useRouter } from 'next/navigation'
 interface AddProps {
-  product: Product
   productId: number
   stockNumber: number
 }
 
-const Add: React.FC<AddProps> = ({ product, productId, stockNumber }) => {
+const Add: React.FC<AddProps> = ({ productId, stockNumber }) => {
   const [quantity, setQuantity] = useState(1)
-  const [addItemToCart] = useAddItemToCartMutation()
+  const [addItemToCart, { isLoading }] = useAddItemToCartMutation()
   const { refetch } = useGetCartQuery()
+  const router = useRouter()
 
   const handleQuantity = (type: string) => {
     if (type === 'd' && quantity > 1) {
@@ -27,18 +27,24 @@ const Add: React.FC<AddProps> = ({ product, productId, stockNumber }) => {
     }
   }
 
-  const handleAddToCart = async (productId: number) => {
+  const handleAddToCart = async () => {
     try {
-      const cartItem = await addItemToCart({ productId, quantity })
+      console.log('quantity is: ', quantity) //debuging line
+      await addItemToCart({ productId, quantity })
         .unwrap()
         .then(() => {
           refetch()
           toast.success('Added to Cart')
         })
-    } catch (error) {
-      console.error('Failed to add to cart:', error)
+    } catch (e: any) {
+      console.error('Failed to add to cart:', e)
+      toast.error(`Failed to add Login required!`)
+      router.push('/auth/login')
     }
   }
+  useEffect(() => {
+    console.log('Quantity state updated:', quantity) // Debugging line
+  }, [quantity])
 
   return (
     <div className="flex flex-col gap-4">
@@ -64,17 +70,21 @@ const Add: React.FC<AddProps> = ({ product, productId, stockNumber }) => {
           </div>
           {stockNumber < 1 ? (
             <div className="text-xs">Product is out of stock</div>
-          ) : (
+          ) : stockNumber < 20 ? (
             <div className="text-xs">
               Only <span className="text-orange-500">{stockNumber} items</span>{' '}
               left!
               <br />
               {"Don't"} miss it
             </div>
+          ) : (
+            //if stock isn't too low
+            <></>
           )}
         </div>
         <button
-          onClick={() => handleAddToCart(productId)}
+          onClick={handleAddToCart}
+          disabled={isLoading}
           className="w-36 text-sm rounded-3xl ring-1 ring-lama text-lama py-2 px-4 hover:bg-lama hover:text-white disabled:cursor-not-allowed disabled:bg-pink-200 disabled:ring-0 disabled:text-white disabled:ring-none"
         >
           Add to Cart

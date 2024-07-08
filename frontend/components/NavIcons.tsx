@@ -2,35 +2,33 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState, useRef } from 'react'
 import { useLogoutMutation } from '@/redux/features/authApiSlice'
 import { useGetCartQuery } from '@/redux/product/productApiSlice'
 import { setCart } from '@/redux/features/cartSlice'
 import { logout as setLogout } from '@/redux/features/authSlice'
 import { useAppSelector, useAppDispatch } from '@/redux/hooks'
 import CartModel from './CartModel'
-import { useDispatch } from 'react-redux'
 
 const NavIcons = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false)
   const [isCartOpen, setIsCartOpen] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
+  const cartRef = useRef<HTMLDivElement>(null)
 
   const router = useRouter()
-  const pathName = usePathname()
   const { isAuthenticated } = useAppSelector((state) => state.auth)
   const cartItems = useAppSelector((state) => state.cart.items)
 
-  const { data: cart, error, isLoading: isCartLoading } = useGetCartQuery()
-  // const dispatch = useDispatch();
+  const { data: cart } = useGetCartQuery()
+
   const dispatch = useAppDispatch()
   useEffect(() => {
     if (cart) {
       dispatch(setCart(cart.items))
     }
   }, [cart, dispatch])
-  // const cartItems = useAppSelector((state) => state.cart.items);
 
   const [logout] = useLogoutMutation()
 
@@ -57,6 +55,10 @@ const NavIcons = () => {
     setIsProfileOpen((prev) => !prev)
   }
 
+  const handleCartIconClick = () => {
+    setIsCartOpen((prev) => !prev)
+  }
+
   // Calculate total quantity of items in the cart
   const itemCount = cartItems.reduce((acc, item) => acc + item.quantity, 0)
   const Profile = () => {
@@ -76,7 +78,7 @@ const NavIcons = () => {
               Profile
             </div>
             <div className="mt-2 cursor-pointer" onClick={handleLogout}>
-              {isLoading ? 'Logging out' : 'Logout'}
+              {isLoading ? 'Logging out...' : 'Logout'}
             </div>
           </div>
         )}
@@ -87,11 +89,7 @@ const NavIcons = () => {
   return (
     <div className="flex items-center gap-4 xl:gap-6 relative">
       {isAuthenticated ? <Profile /> : <Link href="/auth/login">Login</Link>}
-
-      <div
-        className="relative cursor-pointer"
-        onClick={() => setIsCartOpen((prev) => !prev)}
-      >
+      <div className="relative cursor-pointer" onClick={handleCartIconClick}>
         <Image src="/cart.png" alt="" width={22} height={22} />
         <div className="absolute -top-4 -right-4 w-6 h-6 bg-lama rounded-full text-white text-sm flex items-center justify-center">
           {itemCount}

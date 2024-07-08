@@ -7,32 +7,19 @@ import DOMPurify from 'isomorphic-dompurify'
 import ImageUploadForm from '@/components/ImageUploadForm'
 import { Product } from '@/redux/product/productApiSlice'
 import { Spinner } from '@/components/common'
+import { useSearchProductsByImageMutation } from '@/redux/product/productApiSlice'
 
 const ImageSearch = () => {
   const [products, setProducts] = useState<Product[]>([])
-  const [isLoading, setIsLoading] = useState(false)
+  const [searchProductsByImage, { isLoading }] =
+    useSearchProductsByImageMutation()
 
   const handleImageSearch = async (formData: FormData) => {
     try {
-      setIsLoading(true)
-      const response = await fetch(
-        'http://localhost:8000/api/products/search_with_image/',
-        {
-          method: 'POST',
-          body: formData,
-        }
-      )
-
-      if (!response.ok) {
-        throw new Error('Image search failed')
-      }
-
-      const data: Product[] = await response.json()
+      const data = await searchProductsByImage(formData).unwrap()
       setProducts(data)
     } catch (error) {
       console.error('Error:', error)
-    } finally {
-      setIsLoading(false)
     }
   }
 
@@ -84,7 +71,7 @@ const ImageSearch = () => {
                         }}
                       ></div>
                     )}
-                    <button className="rounded-2xl ring-1 ring-lama text-lama w-max py-2 px-4 text-xs hover:bg-lama hover:text-white">
+                    <button className="mt-auto rounded-2xl ring-1 ring-lama text-lama w-max py-2 px-4 text-xs hover:bg-lama hover:text-white">
                       Add to Cart
                     </button>
                   </Link>
