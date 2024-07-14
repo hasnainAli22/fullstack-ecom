@@ -1,9 +1,11 @@
-# Fullstack E-Commerce Project
+# CommerceCraft
 
 ## Overview
-The Fullstack E-Commerce Project is a comprehensive web application that allows users to search for products using images, leveraging the ResNet50 model with PyTorch. The project features a robust backend built with Django Rest Framework, a PostgreSQL database, and a modern frontend developed with Next.js and Redux Toolkit. This application offers a seamless shopping experience with efficient image-based product search capabilities.
+
+This Fullstack E-Commerce Project is a comprehensive web application that allows users to search for products using images, leveraging the ResNet50 model with PyTorch. The project features a robust backend built with Django Rest Framework, a PostgreSQL database, and a modern frontend developed with Next.js and Redux Toolkit. This application offers a seamless shopping experience with efficient image-based product search capabilities.
 
 ## Features
+
 - **Image-Based Search**: Users can upload images to search for products using a ResNet50 model.
 - **User Authentication**: Secure user registration and login functionality.
 - **Product Management**: Admin can add, update, and delete products.
@@ -12,22 +14,24 @@ The Fullstack E-Commerce Project is a comprehensive web application that allows 
 - **Responsive Design**: Optimized for both desktop and mobile devices.
 
 ## Technologies Used
+
 - **Backend**: Django Rest Framework
 - **Database**: PostgreSQL
 - **Machine Learning**: ResNet50 model with PyTorch
 - **Frontend**: Next.js, Redux Toolkit
 
-
 ## Installation
 
 ### Prerequisites
+
 - Python 3.x
 - Node.js
 - PostgreSQL
 - Git
-- Virtualenv
+- venv
 
 ### Backend Setup
+
 1. **Clone the Repository**:
 
    ```bash
@@ -42,54 +46,68 @@ The Fullstack E-Commerce Project is a comprehensive web application that allows 
    .\venv\Scripts\activate
    ```
 
-3. **Install Dependencies**:
-    ```bash
-    pip install -r requirements.txt
-    ```
+3. **Build .env from env.example**
 
-4. **Configure Database**:
-    Update the DATABASES setting in backend/settings.py with your PostgreSQL configuration.
+4. **Install Dependencies**:
+
+   ```bash
+   pip install -r requirements.txt
+   ```
 
 5. **Setup Database**:
-    ```bash
-    python manage.py makemigrations
-    python manage.py migrate
-    ```
+
+   ```bash
+   python manage.py makemigrations
+   python manage.py migrate
+   ```
 
 6. **Create Superuser**:
-    ```bash
-    python manage.py createsuperuser
-    ```
+
+   ```bash
+   python manage.py createsuperuser
+   ```
 
 ### Frontend Setup
 
 1. **Navigate to Frontend Directory**:
-    ```bash
-    cd ./frontend
-    ```
+
+   ```bash
+   cd ./frontend
+   ```
+
 2. **Install Dependencies**:
-    ```bash
-    npm install
-    ```
+
+   ```bash
+   npm install
+   ```
+
 3. **Run Development Server**:
-    ```bash
-    npm run dev
-    ```
+
+   ```bash
+   npm run dev
+   ```
+
 4. **Access the Application:**:
-    Open your web browser and go to [http://localhost:3000]()
+   Open your web browser and go to <http://localhost:3000>
 
 ## Usage
+
 ### Image-Based Search
-1. Access the application at http://localhost:3000.
+
+1. Access the application at <http://localhost:3000>.
 2. Use the search bar to upload an image and search for products.
 
 3. Browse the search results and view product details.
 
 ### Admin Panel
-1. Access the admin panel at http://127.0.0.1:8000/admin.
+
+1. Access the admin panel at <http://127.0.0.1:8000/admin>.
 2. Use the admin credentials created during the createsuperuser step to log in.
 3. Manage products, orders, and users.
 
+## test
 
-
-
+- [x] Add products
+- [x] Add categories
+- [x] Search with image
+- [x] will list soon enough
