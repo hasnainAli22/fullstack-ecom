@@ -96,16 +96,26 @@ class CartViewSet(viewsets.ModelViewSet):
     def add_item(self, request):
         user = request.user
         product_id = request.data.get('product_id')
-        quantity = request.data.get('quantity', 1)
-        
+        quantity = request.data.get('quantity', 1)  # Get 'quantity' from request data or default to 1
+
+        try:
+            quantity = int(quantity)  # Ensure 'quantity' is an integer
+        except ValueError:
+            return Response({'error': 'Invalid quantity'}, status=status.HTTP_400_BAD_REQUEST)
+
+        if quantity < 1:
+            return Response({'error': 'Quantity must be at least 1'}, status=status.HTTP_400_BAD_REQUEST)
+
         cart, created = Cart.objects.get_or_create(user=user)
-        product = Product.objects.get(id=product_id)
+        product = get_object_or_404(Product, id=product_id)
         cart_item, created = CartItem.objects.get_or_create(cart=cart, product=product)
-        
+
         if not created:
-            cart_item.quantity += int(quantity)
+            cart_item.quantity += quantity
+        else:
+            cart_item.quantity = quantity
         cart_item.save()
-        
+
         serializer = self.get_serializer(cart)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
