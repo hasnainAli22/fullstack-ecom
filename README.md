@@ -6,12 +6,12 @@ This Fullstack E-Commerce Project is a comprehensive web application that allows
 
 ## Features
 
-- [x]**Image-Based Search**: Users can upload images to search for products using a ResNet50 model.
-- [x]**User Authentication**: Secure user registration and login functionality.
-- [x]**Product Management**: Admin can add, update, and delete products.
-- [x]**Shopping Cart**: Users can add products to their cart and proceed to checkout.
-- [x]**Order Management**: Track orders and view order history.
-- [x]**Responsive Design**: Optimized for both desktop and mobile devices.
+- [x] **Image-Based Search**: Users can upload images to search for products using a ResNet50 model.
+- [x] **User Authentication**: Secure user registration and login functionality.
+- [x] **Product Management**: Admin can add, update, and delete products.
+- [x] **Shopping Cart**: Users can add products to their cart and proceed to checkout.
+- [x] **Order Management**: Track orders and view order history.
+- [x] **Responsive Design**: Optimized for both desktop and mobile devices.
 
 ## Technologies Used
 
