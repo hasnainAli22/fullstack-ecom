@@ -7,7 +7,7 @@ import {
   Category,
   useFetchCategoryQuery,
 } from '@/redux/product/productApiSlice'
-import { Spinner } from './common'
+import { Spinner } from '../common'
 
 const CategoryList = () => {
   const { data, isLoading, isError } = useFetchCategoryQuery()

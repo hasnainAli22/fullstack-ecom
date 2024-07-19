@@ -1,103 +1,46 @@
-'use client'
+import Link from 'next/link'
+import Menu from './Menu'
+import Image from 'next/image'
+import SearchBar from './SearchBar'
+//import dynamic from 'next/dynamic'
+import NavIcons from './NavIcons'
 
-import { usePathname } from 'next/navigation'
-import { Disclosure } from '@headlessui/react'
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
-import { useAppSelector, useAppDispatch } from '@/redux/hooks'
-import { useLogoutMutation } from '@/redux/features/authApiSlice'
-import { logout as setLogout } from '@/redux/features/authSlice'
-import { NavLink } from '@/components/common'
+//const NavIcons = dynamic(() => import('./NavIcons'), { ssr: false })
 
-export default function Navbar() {
-  const pathname = usePathname()
-  const dispatch = useAppDispatch()
-
-  const [logout] = useLogoutMutation()
-
-  const { isAuthenticated } = useAppSelector((state) => state.auth)
-
-  const handleLogout = () => {
-    logout(undefined)
-      .unwrap()
-      .then(() => {
-        dispatch(setLogout())
-      })
-  }
-
-  const isSelected = (path: string) => (pathname === path ? true : false)
-
-  const authLinks = (isMobile: boolean) => (
-    <>
-      <NavLink
-        isSelected={isSelected('/dashboard')}
-        isMobile={isMobile}
-        href="/dashboard"
-      >
-        Dashboard
-      </NavLink>
-      <NavLink isMobile={isMobile} onClick={handleLogout}>
-        Logout
-      </NavLink>
-    </>
-  )
-
-  const guestLinks = (isMobile: boolean) => (
-    <>
-      <NavLink
-        isSelected={isSelected('/auth/login')}
-        isMobile={isMobile}
-        href="/auth/login"
-      >
-        Login
-      </NavLink>
-      <NavLink
-        isSelected={isSelected('/auth/register')}
-        isMobile={isMobile}
-        href="/auth/register"
-      >
-        Register
-      </NavLink>
-    </>
-  )
-
+const Navbar = () => {
   return (
-    <Disclosure as="nav" className="bg-gray-800">
-      {({ open }) => (
-        <>
-          <div className="mx-auto max-w-7xl px-2 sm:px-6 lg:px-8">
-            <div className="relative flex h-16 items-center justify-between">
-              <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-                <Disclosure.Button className="inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white">
-                  <span className="sr-only">Open main menu</span>
-                  {open ? (
-                    <XMarkIcon className="block h-6 w-6" aria-hidden="true" />
-                  ) : (
-                    <Bars3Icon className="block h-6 w-6" aria-hidden="true" />
-                  )}
-                </Disclosure.Button>
-              </div>
-              <div className="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
-                <div className="flex flex-shrink-0 items-center">
-                  <NavLink href="/" isBanner>
-                    Full Auth
-                  </NavLink>
-                </div>
-                <div className="hidden sm:ml-6 sm:block">
-                  <div className="flex space-x-4">
-                    {isAuthenticated ? authLinks(false) : guestLinks(false)}
-                  </div>
-                </div>
-              </div>
-            </div>
+    <div className="h-20 px-4 md:px-8 lg:px-16 xl:px-16 2xl:px-32 relative">
+      {/* MOBILE */}
+      <div className="h-full flex items-center justify-between md:hidden">
+        <Link href="/" className="flex items-center gap-3">
+          <Image src="/logo.png" alt="" width={80} height={30} />
+          <div className="text-xl tracking-wide">CommerceCraft</div>
+        </Link>
+        <Menu />
+      </div>
+      {/* BIGGER SCREENS */}
+      <div className="hidden md:flex items-center justify-between gap-8 h-full">
+        {/* LEFT */}
+        <div className="w-1/3 xl:w-1/2 flex items-center gap-12">
+          <Link href="/" className="flex items-center gap-3">
+            <Image src="/logo.png" alt="" sizes="20vh" width={80} height={80} />
+            <div className="text-xl tracking-wide">CommerceCraft</div>
+          </Link>
+          <div className="hidden xl:flex gap-3">
+            <Link href="/">Home</Link>
+            <Link href="/">About</Link>
+            <Link href="/">Contact</Link>
+            <Link href="/image-search">Search</Link>
           </div>
-
-          <Disclosure.Panel className="sm:hidden">
-            <div className="space-y-1 px-2 pb-3 pt-2">
-              {isAuthenticated ? authLinks(true) : guestLinks(true)}
-            </div>
-          </Disclosure.Panel>
-        </>
-      )}
-    </Disclosure>
+        </div>
+        {/* RIGHT */}
+        <div className="w-2/3 xl:w-1/2 flex items-center justify-between gap-8">
+          <SearchBar />
+          <NavIcons />
+        </div>
+      </div>
+    </div>
   )
 }
+
+export default Navbar

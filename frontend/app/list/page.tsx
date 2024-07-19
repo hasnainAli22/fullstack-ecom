@@ -1,8 +1,8 @@
 'use client'
 
-import Filter from '@/components/Filter'
-import ProductList from '@/components/ProductList'
-import Skeleton from '@/components/Skeleton'
+import Filter from '@/components/common/Filter'
+import ProductList from '@/components/listings/ProductList'
+import Skeleton from '@/components/common/Skeleton'
 import { useState, useEffect } from 'react'
 import { Suspense } from 'react'
 import Image from 'next/image'
