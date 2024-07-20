@@ -1,5 +1,6 @@
 from django.conf import settings
 from rest_framework.views import APIView
+from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import permissions
@@ -116,11 +117,44 @@ class LogoutView(APIView):
 
         return response
     
-class AddressView(APIView):
+# class AddressView(APIView):
+#     permission_classes = [permissions.IsAuthenticated]
+
+#     def get(self, request, *args, **kwargs):
+#         address = Address.objects.filter(user=request.user).first()
+
+#         serializer = AddressSerializer(address)
+#         return Response(serializer.data, status=status.HTTP_200_OK)
+    
+
+class AddressListView(ListAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = AddressSerializer
+
+    def get_queryset(self):
+        return Address.objects.filter(user=self.request.user)
+
+class DefaultShippingAddressView(APIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
-        address = Address.objects.filter(user=request.user).first()
+        address = Address.objects.filter(user=request.user, default_shipping=True).first()
+        if address:
+            serializer = AddressSerializer(address)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        return Response({"detail": "Default shipping address not found."}, status=status.HTTP_404_NOT_FOUND)
 
-        serializer = AddressSerializer(address)
-        return Response(serializer.data, status=status.HTTP_200_OK)
+class AddressCreateView(CreateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = AddressSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)
+
+class AddressUpdateView(RetrieveUpdateAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = AddressSerializer
+    queryset = Address.objects.all()
+
+    def get_queryset(self):
+        return Address.objects.filter(user=self.request.user)

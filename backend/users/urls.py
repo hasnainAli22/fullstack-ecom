@@ -5,7 +5,10 @@ from .views import (
     CustomTokenRefreshView,
     CustomTokenVerifyView,
     LogoutView,
-    AddressView
+    AddressListView,
+    AddressCreateView,
+    DefaultShippingAddressView,
+    AddressUpdateView,
 )
 # app_name = 'users'
 urlpatterns = [
@@ -18,5 +21,9 @@ urlpatterns = [
     path('jwt/refresh/', CustomTokenRefreshView.as_view()),
     path('jwt/verify/', CustomTokenVerifyView.as_view()),
     path('logout/', LogoutView.as_view()),
-    path('address/', AddressView.as_view()),
+    path('addresses/', AddressListView.as_view(), name='address-list'),
+    path('addresses/default-shipping/', DefaultShippingAddressView.as_view(), name='default-shipping-address'),
+    path('addresses/add/', AddressCreateView.as_view(), name='address-add'),
+    path('addresses/update/<int:pk>/', AddressUpdateView.as_view(), name='address-update'),
 ]
+

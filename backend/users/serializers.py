@@ -8,4 +8,6 @@ class AddressSerializer(serializers.ModelSerializer):
     user = serializers.CharField(source="user.first_name")
     class Meta:
         model = Address
-        fields = "__all__"
+        fields = ['id', 'user', 'default_billing', 'default_shipping', 'city', 'street', 'landmark', 'postal_code', 'address_type', 'phone_number', 'created_at', 'updated_at']
+        read_only_fields = ['user', 'created_at', 'updated_at']
+
