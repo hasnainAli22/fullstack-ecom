@@ -6,6 +6,29 @@
   display: none;
 }
 
-.scrollbar-hide{
+.scrollbar-hide {
   scrollbar-width: none;
+}
+
+/* Custom Scrollbar for Webkit browsers (Chrome, Safari) */
+.scrollbar-thin {
+  scrollbar-width: thin; /* Firefox */
+  scrollbar-color: #d1d5db #f9fafb; /* Firefox */
+}
+
+.scrollbar-thin::-webkit-scrollbar {
+  width: 8px; /* Width of the scrollbar */
+}
+
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: #f9fafb; /* Background of the scrollbar track */
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #3876d3; /* Color of the scrollbar thumb */
+  border-radius: 9999px; /* Makes the scrollbar thumb rounded */
+}
+
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #5708eb; /* Darker color on hover */
 }

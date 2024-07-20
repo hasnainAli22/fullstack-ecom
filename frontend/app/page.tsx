@@ -3,7 +3,7 @@
 import CategoryList from '@/components/listings/CategoryList'
 import ProductList from '@/components/listings/ProductList'
 import Skeleton from '@/components/common/Skeleton'
-import Slider from '@/components/Slider'
+import Slider from '@/components/common/Slider'
 import { Suspense } from 'react'
 
 const HomePage = () => {

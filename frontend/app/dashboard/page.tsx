@@ -1,11 +1,18 @@
 'use client'
 
-import { useRetrieveUserQuery } from '@/redux/features/authApiSlice'
+import {
+  useRetrieveUserQuery,
+  useRetrieveUserAddressesQuery,
+  Address,
+} from '@/redux/features/authApiSlice'
 import { Spinner } from '@/components/common'
-import UpdateButton from '@/components/UpdateButton'
+import UpdateButton from '@/components/common//UpdateButton'
 
 export default function Page() {
   const { data: user, isLoading, isFetching } = useRetrieveUserQuery()
+  const { data: addresses, error } = useRetrieveUserAddressesQuery()
+
+  if (error) return <div>console.log(error)</div>
 
   if (isLoading || isFetching) {
     return (
@@ -14,13 +21,23 @@ export default function Page() {
       </div>
     )
   }
+  const handleEdit = (id: number) => {
+    // Handle edit logic here
+    console.log(`Edit address with ID: ${id}`)
+  }
+
+  const handleDelete = (id: number) => {
+    // Handle delete logic here
+    console.log(`Delete address with ID: ${id}`)
+  }
+
   return (
     <div className="flex flex-col md:flex-row gap-24 md:h-[calc(100vh-180px)] items-center px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64">
       <div className="w-full md:w-1/2">
         <h1 className="text-2xl">Profile</h1>
         <form
           // action={updateUser}
-          className="mt-12 flex flex-col gap-4"
+          className="mt-4 flex flex-col gap-4"
         >
           <label className="text-sm text-gray-700">First Name</label>
           <input
@@ -45,6 +62,82 @@ export default function Page() {
           />
           <UpdateButton />
         </form>
+      </div>
+      <div className="overflow-y-auto max-h-[400px] p-4 scrollbar-thin">
+        <h1 className="text-2xl">Addresses</h1>
+        {addresses?.map((address: Address) => (
+          <div key={address.id}>
+            <div className="border border-gray-300 rounded-lg p-6 m-4 shadow-md bg-white">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-xl font-semibold text-gray-800">
+                  {address.address_type === 'home'
+                    ? 'Home Address'
+                    : 'Office Address'}
+                </h2>
+                <span className="text-gray-600">{address.user}</span>
+              </div>
+              <div className="mb-4">
+                <p className="text-gray-700">
+                  <strong>Street:</strong> {address.street}
+                </p>
+                <p className="text-gray-700">
+                  <strong>City:</strong> {address.city}
+                </p>
+                <p className="text-gray-700">
+                  <strong>Landmark:</strong> {address.landmark}
+                </p>
+                <p className="text-gray-700">
+                  <strong>Postal Code:</strong> {address.postal_code}
+                </p>
+                <p className="text-gray-700">
+                  <strong>Phone:</strong> {address.phone_number}
+                </p>
+              </div>
+              <div className="flex justify-between items-center flex-wrap mb-4">
+                <span
+                  className={`text-sm ${
+                    address.default_billing ? 'text-green-600' : 'text-gray-600'
+                  }`}
+                >
+                  {address.default_billing ? 'Default Billing Address' : ''}
+                </span>
+                <span
+                  className={`text-sm ${
+                    address.default_shipping ? 'text-blue-600' : 'text-gray-600'
+                  }`}
+                >
+                  {address.default_shipping ? 'Default Shipping Address' : ''}
+                </span>
+                <p className="text-xs text-gray-500 mt-2">
+                  <small>
+                    Created at:{' '}
+                    {new Date(address.created_at).toLocaleDateString()}
+                  </small>
+                </p>
+                <p className="text-xs text-gray-500 mt-2">
+                  <small>
+                    Updated at:{' '}
+                    {new Date(address.updated_at).toLocaleDateString()}
+                  </small>
+                </p>
+              </div>
+              <div className="flex justify-end gap-2">
+                <button
+                  onClick={() => handleEdit(address.id)}
+                  className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
+                >
+                  Edit
+                </button>
+                <button
+                  onClick={() => handleDelete(address.id)}
+                  className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 focus:outline-none focus:ring-2 focus:ring-red-400"
+                >
+                  Delete
+                </button>
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
       {/* <div className="w-full md:w-1/2">
         <h1 className="text-2xl">Orders</h1>
@@ -86,27 +179,3 @@ export default function Page() {
 // 	</>
 // );
 //	}
-
-// import UpdateButton from "@/components/UpdateButton";
-// import { updateUser } from "@/lib/actions";
-// import { wixClientServer } from "@/lib/wixClientServer";
-// import { members } from "@wix/members";
-// import Link from "next/link";
-// import { format } from "timeago.js";
-
-// const ProfilePage = async () => {
-//   const wixClient = await wixClientServer();
-
-//   const user = await wixClient.members.getCurrentMember({
-//     fieldsets: [members.Set.FULL],
-//   });
-
-//   if (!user.member?.contactId) {
-//     return <div className="">Not logged in!</div>;
-//   }
-
-//   const orderRes = await wixClient.orders.searchOrders({
-//     search: {
-//       filter: { "buyerInfo.contactId": { $eq: user.member?.contactId } },
-//     },
-//   });

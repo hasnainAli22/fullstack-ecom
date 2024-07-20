@@ -18,13 +18,51 @@ interface CreateUserResponse {
   user: User
 }
 
+export type Address = {
+  id: number
+  user: string // or user can be an object with more detailed user information if needed
+  default_billing: boolean
+  default_shipping: boolean
+  city: string
+  street: string
+  landmark: string
+  postal_code: string
+  address_type: 'home' | 'office'
+  phone_number: string
+  created_at: string
+  updated_at: string
+}
+
 const authApiSlice = apiSlice.injectEndpoints({
   endpoints: (builder) => ({
     retrieveUser: builder.query<User, void>({
       query: () => '/users/me/',
     }),
-    retrieveUserAddress: builder.query<any, void>({
-      query: () => `/address/`,
+    retrieveUserAddresses: builder.query<any, void>({
+      query: () => '/addresses/',
+    }),
+    // Retrieve the default shipping address
+    retrieveDefaultShippingAddress: builder.query<any, void>({
+      query: () => '/addresses/default-shipping/',
+    }),
+    // Add a new address
+    addUserAddress: builder.mutation<any, Partial<Address>>({
+      query: (newAddress) => ({
+        url: '/addresses/add/',
+        method: 'POST',
+        body: newAddress,
+      }),
+    }),
+    // Update an existing address
+    updateUserAddress: builder.mutation<
+      any,
+      { id: number; address: Partial<Address> }
+    >({
+      query: ({ id, address }) => ({
+        url: `/addresses/update/${id}/`,
+        method: 'PUT',
+        body: address,
+      }),
     }),
     socialAuthenticate: builder.mutation<CreateUserResponse, SocialAuthArgs>({
       query: ({ provider, state, code }) => ({
@@ -90,7 +128,10 @@ const authApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useRetrieveUserQuery,
-  useRetrieveUserAddressQuery,
+  useRetrieveUserAddressesQuery,
+  useRetrieveDefaultShippingAddressQuery,
+  useAddUserAddressMutation,
+  useUpdateUserAddressMutation,
   useSocialAuthenticateMutation,
   useLoginMutation,
   useRegisterMutation,
