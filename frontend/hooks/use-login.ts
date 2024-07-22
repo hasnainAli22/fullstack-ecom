@@ -4,11 +4,13 @@ import { useAppDispatch } from '@/redux/hooks'
 import { useLoginMutation } from '@/redux/features/authApiSlice'
 import { setAuth } from '@/redux/features/authSlice'
 import { toast } from 'react-toastify'
+import { useGetCartQuery } from '@/redux/product/productApiSlice'
 
 export default function useLogin() {
   const router = useRouter()
   const dispatch = useAppDispatch()
   const [login, { isLoading }] = useLoginMutation()
+  const { refetch } = useGetCartQuery()
 
   const [formData, setFormData] = useState({
     email: '',
@@ -30,11 +32,11 @@ export default function useLogin() {
       .unwrap()
       .then(() => {
         dispatch(setAuth())
+        refetch()
         toast.success('Logged in')
         router.push('/')
       })
       .catch((e) => {
-        console.log(e)
         toast.error(`Failed to login! ${e.data.detail}`)
       })
   }
