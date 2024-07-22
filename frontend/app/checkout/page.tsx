@@ -8,7 +8,7 @@ import {
 } from '@/redux/product/productApiSlice'
 import {
   useRetrieveUserQuery,
-  useRetrieveUserAddressQuery,
+  useRetrieveDefaultShippingAddressQuery,
 } from '@/redux/features/authApiSlice'
 import { Spinner } from '@/components/common'
 import { toast } from 'react-toastify'
@@ -17,7 +17,8 @@ const Checkout = () => {
   const router = useRouter()
   const { data: user, isLoading: isUserLoading } = useRetrieveUserQuery()
   const { data: address, isLoading: isAddressLoading } =
-    useRetrieveUserAddressQuery()
+    useRetrieveDefaultShippingAddressQuery()
+  console.log(address)
   const { data: cart, refetch } = useGetCartQuery()
   const [clearCart] = useClearCartMutation()
   const [formData, setFormData] = useState({
@@ -35,9 +36,9 @@ const Checkout = () => {
       setFormData({
         name: `${user?.first_name} ${user?.last_name}`,
         email: `${user?.email}`,
-        address: `${address?.street_address}`,
+        address: `${address?.street}`,
         city: `${address?.city}`,
-        landmark: `${address?.apartment_address}`,
+        landmark: `${address?.landmark}`,
         zip: `${address?.postal_code}`,
       })
     }
@@ -69,7 +70,7 @@ const Checkout = () => {
     // Perform checkout process here
     // You can use dispatch to send the form data and cart items to your backend
     if (paymentMethod === 'stripe') {
-      toast.error('Under Development!')
+      toast('Under Development!')
     }
     try {
       // Example: dispatch an action to process the checkout

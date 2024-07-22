@@ -9,11 +9,11 @@ import NavIcons from './NavIcons'
 
 const Navbar = () => {
   return (
-    <div className="h-20 px-4 md:px-8 lg:px-16 xl:px-16 2xl:px-32 relative">
+    <div className="h-16 md:px-8 lg:px-16 xl:px-16 2xl:px-32 relative">
       {/* MOBILE */}
       <div className="h-full flex items-center justify-between md:hidden">
         <Link href="/" className="flex items-center gap-3">
-          <Image src="/logo.png" alt="" width={80} height={30} />
+          <Image src="/logo.png" alt="" width={80} height={45} />
           <div className="text-xl tracking-wide">CommerceCraft</div>
         </Link>
         <Menu />
