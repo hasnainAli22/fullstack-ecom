@@ -6,10 +6,11 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState, useRef } from 'react'
 import { useLogoutMutation } from '@/redux/features/authApiSlice'
 import { useGetCartQuery } from '@/redux/product/productApiSlice'
-import { setCart } from '@/redux/features/cartSlice'
+import { setCart, clearCart } from '@/redux/features/cartSlice'
 import { logout as setLogout } from '@/redux/features/authSlice'
 import { useAppSelector, useAppDispatch } from '@/redux/hooks'
 import CartModel from './CartModel'
+import { toast } from 'react-toastify'
 
 const NavIcons = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false)
@@ -49,6 +50,8 @@ const NavIcons = () => {
       })
     setIsProfileOpen((prev) => !prev)
     setIsLoading(false)
+    dispatch(clearCart())
+    toast.info('Sad to see you go!')
   }
   const handleDashboard = () => {
     router.push('/dashboard')

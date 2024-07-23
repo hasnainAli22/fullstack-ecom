@@ -34,11 +34,10 @@ const Add: React.FC<AddProps> = ({ productId, stockNumber }) => {
         .unwrap()
         .then(() => {
           refetch()
-          toast.success('Added to Cart')
+          toast.info('Added to Cart')
         })
     } catch (e: any) {
-      console.error('Failed to add to cart:', e)
-      toast.error(`Failed to add Login required!`)
+      toast.warn(`Please Login First`)
       router.push('/auth/login')
     }
   }
@@ -84,7 +83,7 @@ const Add: React.FC<AddProps> = ({ productId, stockNumber }) => {
         </div>
         <button
           onClick={handleAddToCart}
-          disabled={isLoading}
+          disabled={isLoading || stockNumber < 1}
           className="w-36 text-sm rounded-3xl ring-1 ring-lama text-lama py-2 px-4 hover:bg-lama hover:text-white disabled:cursor-not-allowed disabled:bg-pink-200 disabled:ring-0 disabled:text-white disabled:ring-none"
         >
           Add to Cart
