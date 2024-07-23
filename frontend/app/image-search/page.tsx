@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { use, useContext, useState, useEffect } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import DOMPurify from 'isomorphic-dompurify'
@@ -8,8 +8,11 @@ import ImageUploadForm from '@/components/forms/ImageUploadForm'
 import { Product } from '@/redux/product/productApiSlice'
 import { Spinner } from '@/components/common'
 import { useSearchProductsByImageMutation } from '@/redux/product/productApiSlice'
+import { ImageFileContext } from '@/context/ImageFileContext'
+import { useRouter } from 'next/navigation'
 
 const ImageSearch = () => {
+  const {file} = useContext(ImageFileContext)
   const [products, setProducts] = useState<Product[]>([])
   const [searchProductsByImage, { isLoading }] =
     useSearchProductsByImageMutation()
@@ -30,7 +33,31 @@ const ImageSearch = () => {
       </div>
     )
   }
-
+  const router = useRouter();
+  useEffect(() => {
+    const searchProducts = async () => {
+      if (file) {
+        const formData = new FormData();
+        formData.append('image', file);
+        try {
+          const data = await searchProductsByImage(formData).unwrap();
+          setProducts(data);
+        } catch (error) {
+          console.error('Error:', error);
+        }
+      }else{
+        router.push('/')
+      }
+    };
+  
+    searchProducts();
+  
+    // Cleanup Function
+    return () => {
+      console.log("Remove the image from the context");
+    };
+  }, [file]);
+  
   return (
     <div className="mt-5 px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64">
       <h1 className="text-2xl">Image Search</h1>

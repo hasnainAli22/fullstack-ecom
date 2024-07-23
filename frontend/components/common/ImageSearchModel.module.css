@@ -1,0 +1,19 @@
+.uploaded-images-cont {
+    @apply flex gap-4 p-4;
+  }
+  
+  .uploaded-image {
+    @apply grow p-2 text-center bg-gray-50 border border-gray-100 rounded-lg;
+  }
+  
+  .uploaded-image > .wrapper {
+    @apply relative flex flex-col gap-2 min-h-[7rem];
+  }
+  
+  .uploaded-image.img-cont img {
+    @apply grow h-60 bg-gray-100 rounded-md;
+  }
+  
+  .uploaded-image-overlay {
+    @apply absolute top-0 left-0 flex flex-col items-center justify-center gap-2 text-white w-full h-full bg-gray-900/20 rounded-lg;
+  }
