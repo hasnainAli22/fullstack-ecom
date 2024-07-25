@@ -1,7 +1,7 @@
 import build from 'next/dist/build'
 import { apiSlice } from '../services/apiSlice'
 
-interface User {
+export interface User {
   first_name: string
   last_name: string
   email: string
@@ -62,6 +62,12 @@ const authApiSlice = apiSlice.injectEndpoints({
         url: `/addresses/update/${id}/`,
         method: 'PUT',
         body: address,
+      }),
+    }),
+    deleteAddress: builder.mutation({
+      query: (id) => ({
+        url: `addresses/${id}/delete/`,
+        method: 'DELETE',
       }),
     }),
     socialAuthenticate: builder.mutation<CreateUserResponse, SocialAuthArgs>({
@@ -132,6 +138,7 @@ export const {
   useRetrieveDefaultShippingAddressQuery,
   useAddUserAddressMutation,
   useUpdateUserAddressMutation,
+  useDeleteAddressMutation,
   useSocialAuthenticateMutation,
   useLoginMutation,
   useRegisterMutation,

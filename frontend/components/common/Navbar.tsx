@@ -16,7 +16,10 @@ const Navbar = () => {
           <Image src="/logo.png" alt="" width={80} height={45} />
           <div className="text-xl tracking-wide">CommerceCraft</div>
         </Link>
-        <Menu />
+        <div className="flex flex-row">
+          <NavIcons />
+          <Menu />
+        </div>
       </div>
       {/* BIGGER SCREENS */}
       <div className="hidden md:flex items-center justify-between gap-8 h-full">
@@ -30,7 +33,6 @@ const Navbar = () => {
             <Link href="/">Home</Link>
             <Link href="/">About</Link>
             <Link href="/">Contact</Link>
-            <Link href="/image-search">Search</Link>
           </div>
         </div>
         {/* RIGHT */}

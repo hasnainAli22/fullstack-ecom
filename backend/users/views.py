@@ -1,6 +1,6 @@
 from django.conf import settings
 from rest_framework.views import APIView
-from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveUpdateAPIView, DestroyAPIView
 from rest_framework.response import Response
 from rest_framework import status
 from rest_framework import permissions
@@ -117,15 +117,6 @@ class LogoutView(APIView):
 
         return response
     
-# class AddressView(APIView):
-#     permission_classes = [permissions.IsAuthenticated]
-
-#     def get(self, request, *args, **kwargs):
-#         address = Address.objects.filter(user=request.user).first()
-
-#         serializer = AddressSerializer(address)
-#         return Response(serializer.data, status=status.HTTP_200_OK)
-    
 
 class AddressListView(ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -158,3 +149,15 @@ class AddressUpdateView(RetrieveUpdateAPIView):
 
     def get_queryset(self):
         return Address.objects.filter(user=self.request.user)
+
+class AddressDeleteView(DestroyAPIView):
+    permission_classes = [permissions.IsAuthenticated]
+    serializer_class = AddressSerializer
+
+    def get_queryset(self):
+        return Address.objects.filter(user=self.request.user)
+
+    def delete(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)

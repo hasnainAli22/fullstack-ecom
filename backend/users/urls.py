@@ -9,6 +9,7 @@ from .views import (
     AddressCreateView,
     DefaultShippingAddressView,
     AddressUpdateView,
+    AddressDeleteView,
 )
 # app_name = 'users'
 urlpatterns = [
@@ -25,5 +26,6 @@ urlpatterns = [
     path('addresses/default-shipping/', DefaultShippingAddressView.as_view(), name='default-shipping-address'),
     path('addresses/add/', AddressCreateView.as_view(), name='address-add'),
     path('addresses/update/<int:pk>/', AddressUpdateView.as_view(), name='address-update'),
+    path('addresses/<int:pk>/delete/', AddressDeleteView.as_view(), name='address-delete' )
 ]
 
