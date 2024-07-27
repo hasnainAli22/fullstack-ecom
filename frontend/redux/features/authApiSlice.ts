@@ -1,4 +1,3 @@
-import build from 'next/dist/build'
 import { apiSlice } from '../services/apiSlice'
 
 export interface User {
@@ -20,7 +19,7 @@ interface CreateUserResponse {
 
 export type Address = {
   id: number
-  user: string // or user can be an object with more detailed user information if needed
+  user: string
   default_billing: boolean
   default_shipping: boolean
   city: string

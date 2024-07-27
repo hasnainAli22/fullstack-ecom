@@ -3,7 +3,7 @@ import { Address } from '@/redux/features/authApiSlice'
 
 interface AddressCardType {
   address: Address
-  onEdit: (id: number) => void
+  onEdit: (address: Address) => void
   onDelete: (id: number) => void
 }
 
@@ -57,7 +57,7 @@ const AddressCard: React.FC<AddressCardType> = ({
     </div>
     <div className="flex justify-between">
       <button
-        onClick={() => onEdit(address.id)}
+        onClick={() => onEdit(address)}
         className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-400"
       >
         Edit

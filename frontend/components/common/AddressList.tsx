@@ -4,7 +4,7 @@ import { Address } from '@/redux/features/authApiSlice'
 
 interface AddressListType {
   addresses: Address[]
-  onEdit: (id: number) => void
+  onEdit: (address: Address) => void
   onDelete: (id: number) => void
   onAdd: () => void
 }
@@ -15,7 +15,7 @@ const AddressList: React.FC<AddressListType> = ({
   onDelete,
   onAdd,
 }) => (
-  <div className="w-full md:w-1/2 flex-1 overflow-y-auto max-h-[400px] p-4 scrollbar-hide">
+  <div className="w-full md:w-1/2 flex-1 overflow-y-auto lg:max-h-[400px] md:max-h-[400px] p-4 scrollbar-hide">
     <div className="flex justify-between items-center">
       <h1 className="text-2xl">Addresses</h1>
       <button

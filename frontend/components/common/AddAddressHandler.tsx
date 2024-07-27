@@ -1,20 +1,25 @@
 import React from 'react'
-import AddAddress from '@/components/common/AddAddressModel'
+import AddAddressModel from '@/components/common/AddAddressModel'
+import { Address } from '@/redux/features/authApiSlice'
 
-type AddAddressModalType = {
+type AddAddressHandlerType = {
   isOpen: boolean
   onClose: () => void
+  mode: 'add' | 'edit'
+  address?: Address
 }
 
-const AddAddressModal: React.FC<AddAddressModalType> = ({
+const AddAddressHandler: React.FC<AddAddressHandlerType> = ({
   isOpen,
   onClose,
+  mode,
+  address,
 }) => {
   if (!isOpen) return null
 
   return (
     <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+      <div className="bg-white p-2 rounded-lg shadow-lg max-w-xl w-full max-h-[calc(100vh-35px)] overflow-auto scrollbar-hide">
         <div className="flex justify-end">
           <button
             onClick={onClose}
@@ -23,10 +28,10 @@ const AddAddressModal: React.FC<AddAddressModalType> = ({
             &times;
           </button>
         </div>
-        <AddAddress onClose={onClose} />
+        <AddAddressModel onClose={onClose} mode={mode} address={address} />
       </div>
     </div>
   )
 }
 
-export default AddAddressModal
+export default AddAddressHandler

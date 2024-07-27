@@ -1,19 +1,26 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {
-  useAddUserAddressMutation,
-  useRetrieveUserAddressesQuery,
   Address,
+  useAddUserAddressMutation,
+  useUpdateUserAddressMutation,
+  useRetrieveUserAddressesQuery,
 } from '@/redux/features/authApiSlice'
 import { toast } from 'react-toastify'
 
 interface AddAddressProps {
   onClose: () => void
+  mode: 'add' | 'edit'
+  address?: Address
 }
 
-const AddAddress: React.FC<AddAddressProps> = ({ onClose }) => {
+const AddAddressModel: React.FC<AddAddressProps> = ({
+  onClose,
+  mode,
+  address,
+}) => {
   const [addUserAddress] = useAddUserAddressMutation()
+  const [updateUserAddress] = useUpdateUserAddressMutation()
   const { refetch } = useRetrieveUserAddressesQuery()
-
   const [formData, setFormData] = useState<Partial<Address>>({
     city: '',
     street: '',
@@ -24,6 +31,12 @@ const AddAddress: React.FC<AddAddressProps> = ({ onClose }) => {
     default_billing: false,
     default_shipping: false,
   })
+
+  useEffect(() => {
+    if (mode === 'edit' && address) {
+      setFormData(address)
+    }
+  }, [mode, address])
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
@@ -48,23 +61,32 @@ const AddAddress: React.FC<AddAddressProps> = ({ onClose }) => {
     e.preventDefault()
     if (!validateForm()) return
     try {
-      await addUserAddress(formData)
-        .unwrap()
-        .then(() => refetch())
-      toast.success('Successfully Added')
+      if (mode === 'add') {
+        await addUserAddress(formData)
+          .unwrap()
+          .then(() => refetch())
+        toast.success('Successfully Added')
+      } else if (mode === 'edit' && address) {
+        await updateUserAddress({ id: address.id, address: formData })
+          .unwrap()
+          .then(() => refetch())
+        toast.success('Successfully Updated')
+      }
       onClose()
     } catch (error) {
       console.error(error)
-      toast.error("Can't Add Address")
+      toast.error(`Can't ${mode === 'add' ? 'Add' : 'Update'} Address`)
     }
   }
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white p-6 rounded-lg shadow-lg max-w-4xl mx-auto"
+      className="bg-white p-6 rounded-lg max-w-4xl mx-auto"
     >
-      <h2 className="text-2xl font-bold text-gray-800 mb-6">Add New Address</h2>
+      <h2 className="text-2xl font-bold text-gray-800 mb-6">
+        {mode === 'add' ? 'Add New Address' : 'Edit Address'}
+      </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <input
           name="city"
@@ -140,10 +162,10 @@ const AddAddress: React.FC<AddAddressProps> = ({ onClose }) => {
         type="submit"
         className="w-full bg-blue-500 text-white py-3 mt-6 rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
       >
-        Add Address
+        {mode === 'add' ? 'Add Address' : 'Update Address'}
       </button>
     </form>
   )
 }
 
-export default AddAddress
+export default AddAddressModel

@@ -5,11 +5,12 @@ import {
   useRetrieveUserQuery,
   useRetrieveUserAddressesQuery,
   useDeleteAddressMutation,
+  Address,
 } from '@/redux/features/authApiSlice'
 import { Spinner } from '@/components/common'
 import ProfileForm from '@/components/common/ProfileForm'
 import AddressList from '@/components/common/AddressList'
-import AddAddressModal from '@/components/common/AddAddressHandler'
+import AddAddressHandler from '@/components/common/AddAddressHandler'
 import { toast } from 'react-toastify'
 
 export default function Page() {
@@ -17,6 +18,10 @@ export default function Page() {
   const { data: addresses, error, refetch } = useRetrieveUserAddressesQuery()
   const [deleteAddress] = useDeleteAddressMutation()
   const [isModalOpen, setIsModalOpen] = useState(false)
+  const [modalMode, setModalMode] = useState<'add' | 'edit'>('add')
+  const [currentAddress, setCurrentAddress] = useState<Address | undefined>(
+    undefined
+  )
 
   if (error) return <div>console.log(error)</div>
 
@@ -28,16 +33,17 @@ export default function Page() {
     )
   }
 
-  const handleEdit = (id?: number) => {
-    console.log(`Edit address with ID: ${id}`)
+  const handleEdit = (address: Address) => {
+    setModalMode('edit')
+    setCurrentAddress(address)
+    setIsModalOpen(true)
   }
 
-  const handleDelete = (id?: number) => {
+  const handleDelete = async (id: number) => {
     console.log(`Delete address with ID: ${id}`)
     try {
-      deleteAddress(id)
-        .unwrap()
-        .then(() => refetch())
+      await deleteAddress(id).unwrap()
+      refetch()
       toast.info('Successfully Deleted')
     } catch (e) {
       console.log(e)
@@ -46,15 +52,18 @@ export default function Page() {
   }
 
   const handleAdd = () => {
+    setModalMode('add')
+    setCurrentAddress(undefined)
     setIsModalOpen(true)
   }
 
   const closeModal = () => {
     setIsModalOpen(false)
+    setCurrentAddress(undefined)
   }
 
   return (
-    <div className="flex flex-col md:flex-row gap-24 md:h-[calc(100vh-180px)] items-center px-4 md:px-8 lg:px-16 xl:px-32 2xl:px-64">
+    <div className="flex flex-col md:flex-row gap-24 md:h-[calc(100vh-180px)] items-center px-4 mt-8 md:px-8 lg:px-16 xl:px-32 2xl:px-64">
       <ProfileForm user={user} />
       <AddressList
         addresses={addresses}
@@ -62,7 +71,12 @@ export default function Page() {
         onDelete={handleDelete}
         onAdd={handleAdd}
       />
-      <AddAddressModal isOpen={isModalOpen} onClose={closeModal} />
+      <AddAddressHandler
+        isOpen={isModalOpen}
+        onClose={closeModal}
+        mode={modalMode}
+        address={currentAddress}
+      />
     </div>
   )
 }
