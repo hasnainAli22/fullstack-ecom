@@ -8,7 +8,11 @@ import {
 import { toast } from 'react-toastify'
 import { useRouter } from 'next/navigation'
 
-const CartModal = () => {
+type CartModalType = {
+  onCheckout: () => void
+}
+
+const CartModal: React.FC<CartModalType> = ({ onCheckout }) => {
   const router = useRouter()
   const { data: cart, isLoading, refetch } = useGetCartQuery()
   const [removeItemFromCart] = useRemoveItemFromCartMutation()
@@ -45,7 +49,7 @@ const CartModal = () => {
       toast.error('One or more items in your cart exceed the available stock.')
       return
     }
-
+    onCheckout()
     router.push('/checkout')
   }
 

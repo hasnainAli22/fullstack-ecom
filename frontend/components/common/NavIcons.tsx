@@ -61,6 +61,9 @@ const NavIcons = () => {
   const handleCartIconClick = () => {
     setIsCartOpen((prev) => !prev)
   }
+  const closeCart = () => {
+    setIsCartOpen(false)
+  }
 
   // Calculate total quantity of items in the cart
   const itemCount = cartItems.reduce((acc, item) => acc + item.quantity, 0)
@@ -98,7 +101,7 @@ const NavIcons = () => {
           {itemCount}
         </div>
       </div>
-      {isCartOpen && <CartModel />}
+      {isCartOpen && <CartModel onCheckout={closeCart} />}
     </div>
   )
 }

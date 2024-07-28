@@ -1,6 +1,6 @@
 'use client'
 //import Reviews from '@/components/Reviews'
-import Add from '@/components/common/Add'
+import Add from '@/components/common/AddToCart'
 import Image from 'next/image'
 import { Suspense } from 'react'
 import { useFetchProductsByIdQuery } from '@/redux/product/productApiSlice'
